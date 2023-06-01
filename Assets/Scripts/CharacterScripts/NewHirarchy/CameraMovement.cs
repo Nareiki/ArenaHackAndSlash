@@ -6,20 +6,20 @@ using UnityEngine;
 public class CameraMovement
 {
     [Header("Camera Rotation Damp")]
-    [Range(1f, 10f)][SerializeField] public float lookRotationDampFactor = 10f;
-    public Transform mainCamera;
+    [Range(1f, 10f)][SerializeField] public float LookRotationDampFactor = 10f;
+    public Transform MainCamera;
 
     public CameraMovement(Transform mainCamera)
     {
-        this.mainCamera = mainCamera;
+        this.MainCamera = mainCamera;
     }
 
     #region Movement with Camera
 
     public Vector3 CalculateMoveDirection(Vector3 moveVal, PlayerInput playerInput)
     {
-        Vector3 cameraForward = new(mainCamera.forward.x, 0, mainCamera.forward.z);
-        Vector3 cameraRight = new(mainCamera.right.x, 0, mainCamera.right.z);
+        Vector3 cameraForward = new(MainCamera.forward.x, 0, MainCamera.forward.z);
+        Vector3 cameraRight = new(MainCamera.right.x, 0, MainCamera.right.z);
 
         Vector3 moveDirection = cameraForward.normalized * moveVal.y + cameraRight.normalized * moveVal.x;
 
@@ -37,7 +37,7 @@ public class CameraMovement
             return moveVal;
 
 
-        playerRB.transform.rotation = Quaternion.Slerp(playerRB.transform.rotation, Quaternion.LookRotation(faceDirection), lookRotationDampFactor * Time.deltaTime);
+        playerRB.transform.rotation = Quaternion.Slerp(playerRB.transform.rotation, Quaternion.LookRotation(faceDirection), LookRotationDampFactor * Time.deltaTime);
 
         return faceDirection;
     }

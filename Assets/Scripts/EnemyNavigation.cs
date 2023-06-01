@@ -6,14 +6,14 @@ using UnityEngine.AI;
 
 public class EnemyNavigation : MonoBehaviour
 {
-    NavMeshAgent agent;
+    NavMeshAgent _agent;
     [SerializeField] private Transform _destination;
     // Start is called before the first frame update
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
 
-        agent.destination = _destination.position;
+        _agent.destination = _destination.position;
         StartCoroutine(FollowPlayer());
     }
 
@@ -27,10 +27,10 @@ public class EnemyNavigation : MonoBehaviour
             switch (distance)
             {
                 case var _ when distance > 10:
-                    agent.destination = _destination.position;
+                    _agent.destination = _destination.position;
                     break;
                 case var _ when distance < 10 && distance > 3:
-                    agent.destination = _destination.position / 2;
+                    _agent.destination = _destination.position / 2;
                     break;
                 case var _ when distance <= 3:
                     Debug.Log("Attack");

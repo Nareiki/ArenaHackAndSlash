@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BasicJump : MonoBehaviour, IJumpable
 {
-    Rigidbody playerRB;
+    Rigidbody _playerRB;
 
     [Header("Jump Variables")]
     [SerializeField] public float Jumpforce = 10f;
@@ -12,7 +12,7 @@ public class BasicJump : MonoBehaviour, IJumpable
 
     private void Start()
     {
-        playerRB = GetComponent<Rigidbody>();
+        _playerRB = GetComponent<Rigidbody>();
         _coyoteCheck = GetComponent<ICoyoteCheckable>();
     }
 
@@ -34,8 +34,8 @@ public class BasicJump : MonoBehaviour, IJumpable
 
     public virtual void DoJumping()
     {
-        playerRB.velocity = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
-        playerRB.AddForce(Vector3.up * Jumpforce, ForceMode.Impulse);
+        _playerRB.velocity = new Vector3(_playerRB.velocity.x, 0, _playerRB.velocity.z);
+        _playerRB.AddForce(Vector3.up * Jumpforce, ForceMode.Impulse);
         JumpUsed = true;
         //audioSource.PlayOneShot(jumpAudio);
     }

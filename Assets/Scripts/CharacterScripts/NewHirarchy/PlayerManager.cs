@@ -6,23 +6,23 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : MonoBehaviour//, IDataPersistence
 {
-    Rigidbody playerRB;
-    PlayerInput playerInput;
-    Transform mainCamera;
+    private Rigidbody _playerRB;
+    private PlayerInput _playerInput;
+    private Transform _mainCamera;
     [HideInInspector] public Vector3 MoveVal;
-    private Animator animator;
-    private Vector3 positionToSave;
-    private Quaternion rotationToSave;
+    private Animator _animator;
+    private Vector3 _positionToSave;
+    private Quaternion _rotationToSave;
 
     [Header("Audio Components")]
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip jumpAudio;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _jumpAudio;
 
-    CameraMovement camMovement;
-    GroundMovement horizontalMovement;
-    AirborneMovement airborneMovement;
-    public GroundCheck groundCheck;
-    WallClimbing wallClimbing;
+    private CameraMovement _camMovement;
+    private GroundMovement _horizontalMovement;
+    private AirborneMovement _airborneMovement;
+    public GroundCheck GroundCheck;
+    private WallClimbing _wallClimbing;
 
     // public void LoadData(GameData data)
     // {
@@ -38,16 +38,16 @@ public class PlayerManager : MonoBehaviour//, IDataPersistence
 
     private void Awake()
     {
-        playerRB = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
-        animator = GetComponentInChildren<Animator>();
-        groundCheck = GetComponent<GroundCheck>();//new GroundCheck(this.transform, GetComponent<CapsuleCollider>());
-        mainCamera = Camera.main.transform;
-        camMovement = new CameraMovement(Camera.main.transform);
-        horizontalMovement = new GroundMovement();
-        airborneMovement = new AirborneMovement(playerRB);
-        playerInput.OnJumpPerformed += GetComponent<IJumpable>().OnJumpPressed;
-        wallClimbing = GetComponent<WallClimbing>();
+        _playerRB = GetComponent<Rigidbody>();
+        _playerInput = GetComponent<PlayerInput>();
+        _animator = GetComponentInChildren<Animator>();
+        GroundCheck = GetComponent<GroundCheck>();//new GroundCheck(this.transform, GetComponent<CapsuleCollider>());
+        _mainCamera = Camera.main.transform;
+        _camMovement = new CameraMovement(Camera.main.transform);
+        _horizontalMovement = new GroundMovement();
+        _airborneMovement = new AirborneMovement(_playerRB);
+        _playerInput.OnJumpPerformed += GetComponent<IJumpable>().OnJumpPressed;
+        _wallClimbing = GetComponent<WallClimbing>();
     }
 
     private void Start()
@@ -58,33 +58,33 @@ public class PlayerManager : MonoBehaviour//, IDataPersistence
 
     private void Update()
     {
-        positionToSave = transform.position;
-        rotationToSave = mainCamera.rotation;
+        _positionToSave = transform.position;
+        _rotationToSave = _mainCamera.rotation;
     }
 
     private void FixedUpdate()
     {
-        MoveVal = playerInput.MoveVal;
-        groundCheck.CheckIfGrounded();
+        MoveVal = _playerInput.MoveVal;
+        GroundCheck.CheckIfGrounded();
 
-        MoveVal = camMovement.CalculateMoveDirection(MoveVal, playerInput);
-        MoveVal = camMovement.FaceMoveDirection(MoveVal, playerRB);
+        MoveVal = _camMovement.CalculateMoveDirection(MoveVal, _playerInput);
+        MoveVal = _camMovement.FaceMoveDirection(MoveVal, _playerRB);
 
-        if (groundCheck.grounded) //Cursor.visible == false)
+        if (GroundCheck.Grounded) //Cursor.visible == false)
         {
             //TODO: When Grounded the Movement does not get into the ground fast enough
-            playerRB.velocity = horizontalMovement.Move(MoveVal);
+            _playerRB.velocity = _horizontalMovement.Move(MoveVal);
             //MovementOptionsCheck();
         }
-        else if (wallClimbing != null && wallClimbing.IsClimbing)
+        else if (_wallClimbing != null && _wallClimbing.IsClimbing)
         {
 
             //playerInput.OnJumpPerformed -= GetComponent<JumpingBehaviour>().OnJumpPressed;
-            playerRB.velocity = wallClimbing.ClimbingMovement(-MoveVal);
+            _playerRB.velocity = _wallClimbing.ClimbingMovement(-MoveVal);
         }
         else
         {
-            playerRB.velocity = airborneMovement.CalculateMovement(MoveVal);
+            _playerRB.velocity = _airborneMovement.CalculateMovement(MoveVal);
         }
 
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IMoveable
 {
-    int runSpeed { get; }
+    int _runSpeed { get; }
 
     public Vector3 CalculateMovement();
 }

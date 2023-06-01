@@ -41,7 +41,7 @@ public class WallJump : WallHandlingBase
 
     private void WallJumpInit()
     {
-        if (!_movementScript.groundCheck.grounded)
+        if (!_movementScript.GroundCheck.Grounded)
         {
             _dragDownTime = _maxTimeTillDragdown;
         }
@@ -67,20 +67,20 @@ public class WallJump : WallHandlingBase
 
     private void WallJumpCheck()
     {
-        if (!_movementScript.groundCheck.grounded && _dragDownTime > 0f && _canWallJump)
+        if (!_movementScript.GroundCheck.Grounded && _dragDownTime > 0f && _canWallJump)
         {
             _playerRB.velocity = Vector3.zero;
             _playerRB.transform.rotation = Quaternion.Slerp(_playerRB.transform.rotation, Quaternion.LookRotation(_jumpAngle), lookRotationDampFactor * Time.deltaTime);
         }
-        else if (!_movementScript.groundCheck.grounded && Mathf.Abs(_playerRB.velocity.y) < 0.1f && _canWallJump)
+        else if (!_movementScript.GroundCheck.Grounded && Mathf.Abs(_playerRB.velocity.y) < 0.1f && _canWallJump)
         {
             _dragDownTime = _maxTimeTillDragdown;
         }
-        else if (!_movementScript.groundCheck.grounded && _playerRB.velocity.y < 0f)
+        else if (!_movementScript.GroundCheck.Grounded && _playerRB.velocity.y < 0f)
         {
             _playerRB.velocity = new Vector3(_playerRB.velocity.x, _playerRB.velocity.y * _slideSpeed, _playerRB.velocity.z);
         }
-        else if (_movementScript.groundCheck.grounded)
+        else if (_movementScript.GroundCheck.Grounded)
         {
             _canWallJump = false;
         }

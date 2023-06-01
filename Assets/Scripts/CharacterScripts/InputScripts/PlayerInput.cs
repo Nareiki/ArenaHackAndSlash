@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour, CharacterControlls.IPlayerInputActions
 {
-    Vector2 lookVal;
-    private CharacterControlls controls;
+    private Vector2 _lookVal;
+    private CharacterControlls _controls;
     [HideInInspector] public Vector2 MoveVal { get; private set; }
     [HideInInspector] public static bool DisableMovement = true;
     [HideInInspector] public event Action OnJumpPerformed;
@@ -13,17 +13,17 @@ public class PlayerInput : MonoBehaviour, CharacterControlls.IPlayerInputActions
 
     private void OnEnable()
     {
-        if (controls != null)
+        if (_controls != null)
             return;
 
-        controls = new CharacterControlls();
-        controls.PlayerInput.SetCallbacks(this);
-        controls.PlayerInput.Enable();
+        _controls = new CharacterControlls();
+        _controls.PlayerInput.SetCallbacks(this);
+        _controls.PlayerInput.Enable();
     }
 
     private void OnDisable()
     {
-        controls.PlayerInput.Disable();
+        _controls.PlayerInput.Disable();
     }
 
     public void OnMovement(InputAction.CallbackContext context)
@@ -33,7 +33,7 @@ public class PlayerInput : MonoBehaviour, CharacterControlls.IPlayerInputActions
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        lookVal = context.ReadValue<Vector2>();
+        _lookVal = context.ReadValue<Vector2>();
     }
 
     public void OnJump(InputAction.CallbackContext context)
