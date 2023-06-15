@@ -7,13 +7,14 @@ using UnityEngine;
 public class CheckEnemyInFOVRange : BasicNode
 {
     private Transform _transform;
-    private static LayerMask _enemyLayerMask = 1 << 16;
+    private LayerMask _enemyLayerMask;
 
     private float _distanceBuffer = 2f;
 
-    public CheckEnemyInFOVRange(Transform transform)
+    public CheckEnemyInFOVRange(Transform transform, LayerMask enemyLayerMask)
     {
         _transform = transform;
+        _enemyLayerMask = enemyLayerMask;
     }
 
     public override NodeState Evaluate()
@@ -23,7 +24,6 @@ public class CheckEnemyInFOVRange : BasicNode
         if (t == null)
         {
             Collider[] colliders = Physics.OverlapSphere(_transform.position, GuardBT.FovRange, _enemyLayerMask);
-            Debug.Log(colliders.Length);
             if (colliders.Length > 0)
             {
                 Parent.Parent.SetData("target", colliders[0].transform);

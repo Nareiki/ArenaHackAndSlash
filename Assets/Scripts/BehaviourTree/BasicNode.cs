@@ -77,8 +77,5 @@ public class BasicNode
             cleared = node.ClearData(key);
 
         return cleared;
-
-
-
     }
 }

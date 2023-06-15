@@ -12,6 +12,7 @@ public class TaskAttack : BasicNode
     private float _attackTime = 1f;
     private float _attackCounter = 0f;
 
+
     public override NodeState Evaluate()
     {
         Transform target = (Transform)GetData("target");

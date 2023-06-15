@@ -8,13 +8,15 @@ public class GuardBT : BasicTree
 {
 
     private NavMeshAgent _agent;
-    public Transform[] Waypoints;
+    [SerializeField] private Transform[] _waypoints;
 
     public static float Speed = 2f;
 
     public static float FovRange = 6f;
 
     public static float AttackRange = 1f;
+
+    private LayerMask _enemyLayerMask = 1 << 16;
 
     protected override BasicNode SetupTree()
     {
@@ -26,11 +28,11 @@ public class GuardBT : BasicTree
                 new TaskAttack(),
             }),
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInFOVRange(transform),
+                new CheckEnemyInFOVRange(transform, _enemyLayerMask),
                 new TaskGoToTarget(transform, _agent),
 
             }),
-            new TaskPatrol(transform, Waypoints, _agent),
+            new TaskPatrol(transform, _waypoints, _agent),
         });
         //BasicNode root = new TaskPatrol(transform, Waypoints, _agent);
         return root;
