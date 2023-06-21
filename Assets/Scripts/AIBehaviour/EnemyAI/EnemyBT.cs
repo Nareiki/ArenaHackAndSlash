@@ -10,7 +10,7 @@ public class EnemyBT : BasicTree
     private Transform _selectedTarget;
     private LayerMask _enemyLayerMask = 1 << 15 | 1 << 17;
 
-    [SerializeField] private Transform[] _waypoints;
+    [SerializeField] public Transform[] _waypoints;
 
     protected override BasicNode SetupTree()
     {

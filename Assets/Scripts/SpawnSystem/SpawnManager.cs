@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private Transform[] _spawnPoints;
 
-    private IEnemy[] _enemies;
+    private IDamageable[] _enemies;
 
     [SerializeField] private GameObject _enemy;
     [SerializeField] private Transform[] _waypoint;
@@ -23,8 +23,10 @@ public class SpawnManager : MonoBehaviour
     {
         foreach (var point in _spawnPoints)
         {
-            GameObject enemy = Instantiate(_enemy, point.position, point.rotation);
-        }
-    }
+            var enemy = Instantiate(_enemy, point.position, point.rotation).GetComponent<EnemyBT>();
+            enemy._waypoints = _waypoint;
 
+        }
+
+    }
 }

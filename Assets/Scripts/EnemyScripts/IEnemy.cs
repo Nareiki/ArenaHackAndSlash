@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public interface IEnemy
 {
-    public float HealthPoints { get; }
-    public bool TakeHit();
+
+    public EnemyType EnemyType { get; }
 
 }

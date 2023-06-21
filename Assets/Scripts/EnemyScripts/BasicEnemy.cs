@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum EnemyType
+public enum EnemyType
 {
     melee,
     ranged,
@@ -10,10 +10,12 @@ enum EnemyType
     cavalery
 }
 
-public class BasicEnemy : MonoBehaviour, IEnemy
+public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
 {
     public float HealthPoints { get; private set; }
 
+    private string _productName = "BasicEnemy";
+    public string ProductName { get => _productName; private set => _productName = value; }
 
     private void Awake()
     {
@@ -33,5 +35,10 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     private void Die()
     {
         Destroy(gameObject);
+    }
+
+    public void Initialize()
+    {
+        gameObject.name = _productName;
     }
 }
