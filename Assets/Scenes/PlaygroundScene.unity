@@ -250,12 +250,12 @@ PrefabInstance:
     - target: {fileID: 2482698504431033026, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000016292276
+      value: 0.00000001629227
       objectReference: {fileID: 0}
     - target: {fileID: 2482698504431033026, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000000553366
+      value: -0.0000000055336584
       objectReference: {fileID: 0}
     - target: {fileID: 3914628511738678325, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
@@ -287,6 +287,7 @@ GameObject:
   m_Component:
   - component: {fileID: 226208958}
   - component: {fileID: 226208957}
+  - component: {fileID: 226208959}
   m_Layer: 0
   m_Name: SpawnPoints
   m_TagString: Untagged
@@ -316,9 +317,8 @@ MonoBehaviour:
   - {fileID: 2006919261}
   - {fileID: 1319254657}
   _enemy: {fileID: 6277912375836810856, guid: 268572da0fae74668ba4ba2403fca433, type: 3}
-  _waypoint:
-  - {fileID: 1146065578}
-  - {fileID: 1111802663}
+  _enemyFactory: {fileID: 226208959}
+  enemyBTs: []
 --- !u!4 &226208958
 Transform:
   m_ObjectHideFlags: 0
@@ -342,6 +342,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &226208959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226208956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c025f6fadef47578e33211a0ae432a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _basicEnemy: {fileID: 6277912375836810856, guid: 268572da0fae74668ba4ba2403fca433,
+    type: 3}
+  _waypointArray:
+  - {fileID: 1146065578}
+  - {fileID: 1111802663}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

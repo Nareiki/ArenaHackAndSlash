@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBT : BasicTree
+public class EnemyBT : BasicTree, IProduct
 {
 
     private NavMeshAgent _agent;
@@ -12,11 +12,12 @@ public class EnemyBT : BasicTree
 
     [SerializeField] public Transform[] _waypoints;
 
+    private string _enemyBTName = "BasicEnemy";
+    public string ProductName { get => _enemyBTName; private set => _enemyBTName = value; }
+
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
-
-
 
         BasicNode root = new Selector(new List<BasicNode>
         {
@@ -38,5 +39,8 @@ public class EnemyBT : BasicTree
 
     }
 
-
+    public void Initialize()
+    {
+        gameObject.name = _enemyBTName;
+    }
 }
