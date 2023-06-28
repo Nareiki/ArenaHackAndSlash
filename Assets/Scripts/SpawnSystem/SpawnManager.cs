@@ -15,6 +15,8 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private List<EnemyBT> enemyBTs;
 
+    [SerializeField] private EnemyFactoryScr _enemyFactoryScr;
+
     private void Start()
     {
 
@@ -26,6 +28,10 @@ public class SpawnManager : MonoBehaviour
         foreach (var enemy in enemyBTs)
         {
             print(enemy.ProductName);
+            if (!enemy.isActiveAndEnabled)
+            {
+                enemyBTs.Remove(enemy);
+            }
         }
     }
 
@@ -33,7 +39,7 @@ public class SpawnManager : MonoBehaviour
     {
         foreach (var point in _spawnPoints)
         {
-            var enemy = (EnemyBT)_enemyFactory.SpawnObject(point.position);
+            var enemy = (EnemyBT)_enemyFactoryScr.SpawnObject(point.position);
             enemyBTs.Add(enemy);
         }
     }

@@ -22,7 +22,7 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
         HealthPoints = 100;
     }
 
-    public bool TakeHit()
+    public bool? TakeHit()
     {
         HealthPoints -= 25;
         Debug.Log(HealthPoints);
@@ -34,7 +34,8 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
 
     private void Die()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 
     public void Initialize()

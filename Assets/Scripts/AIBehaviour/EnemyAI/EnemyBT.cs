@@ -24,7 +24,7 @@ public class EnemyBT : BasicTree, IProduct
             new Sequence(new List<BasicNode>
             {
                 new CheckEnemyInAttackRange(transform),
-                new TaskAttack(),
+                //new TaskAttack(),
 
             }),
             new Sequence(new List<BasicNode>

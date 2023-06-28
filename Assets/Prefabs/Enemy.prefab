@@ -95,9 +95,8 @@ GameObject:
   - component: {fileID: 1030237279992899243}
   - component: {fileID: 7640050337112389598}
   - component: {fileID: 1407364417296606100}
-  - component: {fileID: 2280559492859534526}
   - component: {fileID: 4758144294276663994}
-  - component: {fileID: 3331084135521534690}
+  - component: {fileID: -220149759777911056}
   m_Layer: 16
   m_Name: Enemy
   m_TagString: Untagged
@@ -193,19 +192,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2280559492859534526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6277912375836810856}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9cdff70dcf3447469b43d541d5ad0e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _destination: {fileID: 0}
 --- !u!114 &4758144294276663994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +207,7 @@ MonoBehaviour:
   _waypoints:
   - {fileID: 0}
   - {fileID: 0}
---- !u!114 &3331084135521534690
+--- !u!114 &-220149759777911056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,6 +216,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6277912375836810856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ce609667b7224907b3297f77c256ed8, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d6bb9ca9cf114966a9742f402576eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
