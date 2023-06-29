@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class EnemyFactoryScr : ScriptableObject
+public class EnemyFactory : ScriptableObject
 {
 
     //private Dictionary<string, Type> _enemys;

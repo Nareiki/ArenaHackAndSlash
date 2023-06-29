@@ -14,7 +14,7 @@ public class GuardBT : BasicTree
 
     public static float FovRange = 6f;
 
-    public static float AttackRange = 1f;
+    public static float AttackRange = 2f;
 
     private LayerMask _enemyLayerMask = 1 << 16;
 

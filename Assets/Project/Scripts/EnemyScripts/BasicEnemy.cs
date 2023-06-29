@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum EnemyType
 {
@@ -16,6 +17,8 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
 
     private string _productName = "BasicEnemy";
     public string ProductName { get => _productName; private set => _productName = value; }
+
+    public UnityEvent EnemyDied;
 
     private void Awake()
     {
@@ -36,6 +39,7 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
     {
         gameObject.SetActive(false);
         //Destroy(gameObject);
+        MSEnemySpawn.Publish(this);
     }
 
     public void Initialize()

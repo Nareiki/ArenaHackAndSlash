@@ -39,5 +39,4 @@ public class TaskAttack : BasicNode
         State = NodeState.RUNNING;
         return State;
     }
-
 }
