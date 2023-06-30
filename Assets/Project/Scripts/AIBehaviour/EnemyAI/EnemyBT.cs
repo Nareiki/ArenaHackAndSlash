@@ -25,6 +25,7 @@ public class EnemyBT : BasicTree, IProduct
             {
                 new CheckEnemyInAttackRange(transform),
                 //new TaskAttack(),
+                new KeepDistance(_agent, transform, 4)
 
             }),
             new Sequence(new List<BasicNode>
@@ -34,7 +35,7 @@ public class EnemyBT : BasicTree, IProduct
 
             }),
             new TaskPatrol(transform, _waypoints, _agent),
-        });
+        }); ;
         return root;
 
     }
