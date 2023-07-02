@@ -9,6 +9,8 @@ public class KeepDistance : BasicNode
     private Transform _transform;
     private float _distanceToKeep;
 
+    private float radiusToMove = 0f;
+
 
 
     public KeepDistance(NavMeshAgent agent, Transform transform, float distance)
@@ -23,21 +25,26 @@ public class KeepDistance : BasicNode
     public override NodeState Evaluate()
     {
         Transform target = (Transform)GetData("target");
-        float angle = Vector3.Angle(_transform.position, target.position);
 
-        if (Vector3.Distance(_transform.position, target.position) < _distanceToKeep)
+        if (target != null)
         {
-            _agent.isStopped = true;
+            radiusToMove = Vector3.Distance(_transform.position, target.position);
 
-            Vector3 newPosition = _transform.position;
+            if (radiusToMove <= _distanceToKeep)
+            {
 
-            //TODO: Google or use ChatGPT to look up a way to use angle and magnitude to calculate a new Vector
 
+                //Calculate direction and distance to move around the target
+                Vector3 direction = (_transform.position - target.position).normalized;
+                Vector3 newPosition = _transform.position + direction * _distanceToKeep;
 
-            return NodeState.SUCCESS;
+                _agent.destination = newPosition;
+
+                //Debug.Log(" old Position " + _transform.position + "\n| target position " + target.position + "\n| new Position " + newPosition + "\n agent Destination " + _agent.destination);
+
+                return NodeState.SUCCESS;
+            }
         }
-        _agent.isStopped = false;
-
 
         return NodeState.FAILURE;
     }

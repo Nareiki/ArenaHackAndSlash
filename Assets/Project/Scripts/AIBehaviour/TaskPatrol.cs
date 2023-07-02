@@ -38,7 +38,6 @@ public class TaskPatrol : BasicNode
         else
         {
             Transform wp = _waypoints[_currentWaypointIndex];
-            Debug.Log(Vector3.Distance(_transform.position, wp.position));
             if (Vector3.Distance(_transform.position, wp.position) < 1f)
             {
                 //_transform.position = wp.position;

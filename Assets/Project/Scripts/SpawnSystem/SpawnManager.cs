@@ -52,7 +52,7 @@ public class SpawnManager : MonoBehaviour
 
     private bool ShouldSpawnEnemy()
     {
-        return _enemyBTs.Count <= _minEnemyLoaded;
+        return _enemyBTs.Count < _minEnemyLoaded;
     }
 
     private void SpawnEnemyForAllSpawnPoints()

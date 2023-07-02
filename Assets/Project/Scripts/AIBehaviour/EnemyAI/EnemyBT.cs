@@ -10,6 +10,8 @@ public class EnemyBT : BasicTree, IProduct
     private Transform _selectedTarget;
     private LayerMask _enemyLayerMask = 1 << 15 | 1 << 17;
 
+    [SerializeField] private float _distanceToKeep = 6f;
+
     [SerializeField] public Transform[] _waypoints;
 
     private string _enemyBTName = "BasicEnemy";
@@ -21,17 +23,18 @@ public class EnemyBT : BasicTree, IProduct
 
         BasicNode root = new Selector(new List<BasicNode>
         {
-            new Sequence(new List<BasicNode>
-            {
-                new CheckEnemyInAttackRange(transform),
-                //new TaskAttack(),
-                new KeepDistance(_agent, transform, 4)
+            //new Sequence(new List<BasicNode>
+            //{
+            //    new CheckEnemyInAttackRange(transform),
+            //    //new TaskAttack(),
+                
 
-            }),
+            //}),
             new Sequence(new List<BasicNode>
             {
                 new CheckEnemyInFOVRange(transform, _enemyLayerMask),
-                new TaskGoToTarget(transform, _agent),
+                new KeepDistance(_agent, transform, _distanceToKeep),
+                //new TaskGoToTarget(transform, _agent),
 
             }),
             new TaskPatrol(transform, _waypoints, _agent),
