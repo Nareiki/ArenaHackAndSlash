@@ -38,7 +38,7 @@ public class SpawnManager : MonoBehaviour
 
     #endregion
 
-    #region Enemy Spawing
+    #region Enemy Spawning
 
     private void SpawnEnemyRandomly()
     {
