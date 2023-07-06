@@ -13,6 +13,8 @@ public class EnemyBT : BasicTree, IProduct
     [SerializeField] private float _distanceToKeep = 6f;
 
     [SerializeField] public Transform[] _waypoints;
+    [SerializeField] public float _minRange = 1f;
+    [SerializeField] public float _maxRange = 5f;
 
     private string _enemyBTName = "BasicEnemy";
     public string ProductName { get => _enemyBTName; private set => _enemyBTName = value; }
@@ -34,11 +36,12 @@ public class EnemyBT : BasicTree, IProduct
             {
                 new CheckEnemyInFOVRange(transform, _enemyLayerMask),
                 new KeepDistance(_agent, transform, _distanceToKeep),
+                new SurroundTarget(transform, _agent, _distanceToKeep, _minRange, _maxRange)
                 //new TaskGoToTarget(transform, _agent),
 
             }),
             new TaskPatrol(transform, _waypoints, _agent),
-        }); ;
+        });
         return root;
 
     }

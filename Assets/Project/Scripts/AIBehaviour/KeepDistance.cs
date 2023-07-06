@@ -8,6 +8,7 @@ public class KeepDistance : BasicNode
     private NavMeshAgent _agent;
     private Transform _transform;
     private float _distanceToKeep;
+    private float _distanceWithBuffer;
 
     private float radiusToMove = 0f;
 
@@ -18,6 +19,7 @@ public class KeepDistance : BasicNode
         _agent = agent;
         _transform = transform;
         _distanceToKeep = distance;
+        _distanceWithBuffer = _distanceToKeep + 1f;
     }
 
 
@@ -30,13 +32,12 @@ public class KeepDistance : BasicNode
         {
             radiusToMove = Vector3.Distance(_transform.position, target.position);
 
-            if (radiusToMove <= _distanceToKeep)
+
+            if (radiusToMove <= _distanceWithBuffer)
             {
-
-
                 //Calculate direction and distance to move around the target
                 Vector3 direction = (_transform.position - target.position).normalized;
-                Vector3 newPosition = _transform.position + direction * _distanceToKeep;
+                Vector3 newPosition = target.position + direction * _distanceToKeep;
 
                 _agent.destination = newPosition;
 
