@@ -26,6 +26,7 @@ public class CheckEnemyInFOVRange : BasicNode
             Collider[] colliders = Physics.OverlapSphere(_transform.position, GuardBT.FovRange, _enemyLayerMask);
             if (colliders.Length > 0)
             {
+                //TODO: Make Black Box for Data share
                 Parent.Parent.SetData("target", colliders[0].transform);
                 State = NodeState.SUCCESS;
                 return State;

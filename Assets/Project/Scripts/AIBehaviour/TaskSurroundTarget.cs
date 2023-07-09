@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.AI;
 using Cinemachine.Utility;
 
-public class SurroundTarget : BasicNode
+public class TaskSurroundTarget : BasicNode
 {
     private Transform _transform;
     private NavMeshAgent _agent;
@@ -15,7 +15,7 @@ public class SurroundTarget : BasicNode
 
 
 
-    public SurroundTarget(Transform transform, NavMeshAgent agent, float distanceToKeep, float rangeMin, float rangeMax)
+    public TaskSurroundTarget(Transform transform, NavMeshAgent agent, float distanceToKeep, float rangeMin, float rangeMax)
     {
         _transform = transform;
         _agent = agent;

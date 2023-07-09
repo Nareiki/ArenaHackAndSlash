@@ -35,10 +35,18 @@ public class EnemyBT : BasicTree, IProduct
             new Sequence(new List<BasicNode>
             {
                 new CheckEnemyInFOVRange(transform, _enemyLayerMask),
-                new KeepDistance(_agent, transform, _distanceToKeep),
-                new SurroundTarget(transform, _agent, _distanceToKeep, _minRange, _maxRange)
+                new TaskKeepDistance(_agent, transform, _distanceToKeep),
+                new TaskSurroundTarget(transform, _agent, _distanceToKeep, _minRange, _maxRange),
+                new Sequence(new List<BasicNode> {
+                    new TaskIsAbleToAttack(),
+                    new TaskGoToTarget(transform, _agent),
+                })
                 //new TaskGoToTarget(transform, _agent),
 
+            }),
+            new Sequence(new List<BasicNode>{
+                new CheckEnemyInAttackRange(transform),
+                new TaskAttack()
             }),
             new TaskPatrol(transform, _waypoints, _agent),
         });

@@ -317,7 +317,7 @@ MonoBehaviour:
   - {fileID: 2006919261}
   - {fileID: 1319254657}
   _enemy: {fileID: 6277912375836810856, guid: 268572da0fae74668ba4ba2403fca433, type: 3}
-  _minEnemyLoaded: 10
+  _minEnemyLoaded: 1
   _enemyFactory: {fileID: 11400000, guid: 2d9c75d1fa66948d3bde3a26b7938824, type: 2}
 --- !u!4 &226208958
 Transform:

@@ -9,6 +9,11 @@ public class TaskIsAbleToAttack : BasicNode
     private float _attackTime = 1f;
     private float _attackCounter = 0f;
 
+    private float _cooldownTime = 5f;
+    private float _cooldownCounter = 0f;
+
+    private bool _canAttack = false;
+
 
     public override NodeState Evaluate()
     {
@@ -17,18 +22,36 @@ public class TaskIsAbleToAttack : BasicNode
         {
             _lastTarget = target;
         }
+        if (target == null)
+        {
+            Parent.Parent.Parent.ClearData("canAttack");
+        }
 
         _attackCounter += Time.deltaTime;
 
+        //TODO: Fix bug with setting Data
+        _canAttack = (bool)GetData("canAttack") ? true : false;
+
+        if (_canAttack)
+        {
+            return NodeState.RUNNING;
+        }
+
         if (_attackCounter >= _attackTime)
         {
+            if (_cooldownCounter <= _cooldownTime)
+            {
+                _cooldownCounter += Time.deltaTime;
+                return NodeState.FAILURE;
+            }
+            else
+            {
+                _cooldownCounter = 0f;
+                _attackCounter = 0f;
+            }
+            Parent.Parent.Parent.SetData("canAttack", true);
             Debug.Log("Can Attack");
             return NodeState.SUCCESS;
-        }
-        else
-        {
-
-            _attackCounter = 0f;
         }
 
 

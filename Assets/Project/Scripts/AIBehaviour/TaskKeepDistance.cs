@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class KeepDistance : BasicNode
+public class TaskKeepDistance : BasicNode
 {
     private NavMeshAgent _agent;
     private Transform _transform;
@@ -14,7 +14,7 @@ public class KeepDistance : BasicNode
 
 
 
-    public KeepDistance(NavMeshAgent agent, Transform transform, float distance)
+    public TaskKeepDistance(NavMeshAgent agent, Transform transform, float distance)
     {
         _agent = agent;
         _transform = transform;

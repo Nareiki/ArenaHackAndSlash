@@ -9,10 +9,6 @@ public class TaskAttack : BasicNode
     //TODO: Make an Enemy Manager
     private BasicEnemy _enemyManager;
 
-    private float _attackTime = 1f;
-    private float _attackCounter = 0f;
-
-
     public override NodeState Evaluate()
     {
         Transform target = (Transform)GetData("target");
@@ -21,22 +17,26 @@ public class TaskAttack : BasicNode
             _enemyManager = target.GetComponent<BasicEnemy>();
             _lastTarget = target;
         }
+        else if (target == null)
+        {
+            return NodeState.FAILURE;
+        }
 
-        _attackCounter += Time.deltaTime;
-        if (_attackCounter >= _attackTime)
+        bool canAttack = (bool)GetData("canAttack");
+
+        if (canAttack)
         {
             bool? enemyIsDead = _enemyManager.TakeHit();
             if (enemyIsDead.Value)
             {
                 ClearData("target");
             }
-            else
-            {
-                _attackCounter = 0f;
-            }
+
+            Parent.Parent.SetData("canAttack", false);
+            return NodeState.SUCCESS;
         }
 
-        State = NodeState.RUNNING;
+        State = NodeState.FAILURE;
         return State;
     }
 }
