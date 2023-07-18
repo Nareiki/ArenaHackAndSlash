@@ -69,11 +69,9 @@ public class TaskIsAbleToAttack : BasicNode
             Parent.Parent.SetData("onCooldown", false);
             Parent.Parent.SetData("canAttack", true);
 
-            Debug.Log("Can Attack");
             return NodeState.SUCCESS;
         }
 
-        Debug.Log("cannot Attack");
         return _canAttack ? NodeState.RUNNING : NodeState.FAILURE;
     }
 }
