@@ -18,6 +18,12 @@ public class TaskGoToTarget : BasicNode
     {
         Transform target = (Transform)GetData("target");
 
+        if(target == null)
+        {
+            ClearData("target");
+            return NodeState.FAILURE;
+        }
+
         if (Vector3.Distance(_transform.position, target.position) > 1.5f)
         {
             _agent.destination = target.position;
