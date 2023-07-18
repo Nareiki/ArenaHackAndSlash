@@ -17,9 +17,9 @@ public class ObjectPooler : MonoBehaviour
 
     public static ObjectPooler SharedInstance;
 
-    public List<GameObject> PooledObjects;
+    private List<GameObject> _pooledObjects;
 
-    public List<ObjectPoolItem> itemsToPool;
+    private List<ObjectPoolItem> _itemsToPool;
 
     private void Awake()
     {
@@ -29,15 +29,15 @@ public class ObjectPooler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PooledObjects = new List<GameObject>();
+        _pooledObjects = new List<GameObject>();
 
-        foreach (var item in itemsToPool)
+        foreach (var item in _itemsToPool)
         {
             for (int i = 0; i < item.AmountToPool; i++)
             {
-                GameObject obj = (GameObject)Instantiate(item.ObjectToPool);
+                GameObject obj = Instantiate(item.ObjectToPool);
                 obj.SetActive(false);
-                PooledObjects.Add(obj);
+                _pooledObjects.Add(obj);
 
             }
         }
@@ -46,22 +46,22 @@ public class ObjectPooler : MonoBehaviour
     public GameObject GetPooledObject(string tag)
     {
         //1
-        for (int i = 0; i < PooledObjects.Count; i++)
+        for (int i = 0; i < _pooledObjects.Count; i++)
         {
-            if (!PooledObjects[i].activeInHierarchy || PooledObjects[i].tag == tag)
+            if (!_pooledObjects[i].activeInHierarchy || _pooledObjects[i].tag == tag)
             {
-                return PooledObjects[i];
+                return _pooledObjects[i];
             }
         }
-        foreach (var poolItem in itemsToPool)
+        foreach (var poolItem in _itemsToPool)
         {
             if (poolItem.ObjectToPool.tag == tag)
             {
                 if (poolItem.ShouldExpand)
                 {
-                    GameObject obj = (GameObject)Instantiate(poolItem.ObjectToPool);
+                    GameObject obj = Instantiate(poolItem.ObjectToPool);
                     obj.SetActive(false);
-                    PooledObjects.Add(obj);
+                    _pooledObjects.Add(obj);
                     return obj;
                 }
             }
