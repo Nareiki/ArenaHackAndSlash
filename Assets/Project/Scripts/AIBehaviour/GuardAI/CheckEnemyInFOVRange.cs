@@ -28,6 +28,7 @@ public class CheckEnemyInFOVRange : BasicNode
             {
                 //TODO: Make Black Box for Data share
                 Parent.Parent.SetData("target", colliders[0].transform);
+                Parent.Parent.SetData("canAttack", false);
                 State = NodeState.SUCCESS;
                 return State;
             }

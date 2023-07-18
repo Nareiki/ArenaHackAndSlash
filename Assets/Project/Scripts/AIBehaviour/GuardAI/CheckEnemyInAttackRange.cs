@@ -21,8 +21,11 @@ public class CheckEnemyInAttackRange : BasicNode
         }
 
         Transform target = (Transform)t;
-        if (Vector3.Distance(_transform.position, target.position) <= GuardBT.AttackRange)
+        if (Vector3.Distance(_transform.position, target.position) <= 1.5f)
         {
+            bool test = (bool)GetData("canAttack");
+            if (!test) return NodeState.FAILURE;
+
             //TODO: Do the Attacking
             State = NodeState.SUCCESS;
             return State;

@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IDamageable
 {
     public float HealthPoints { get; }
-    public bool? TakeHit();
+    public bool TakeHit();
 
 }

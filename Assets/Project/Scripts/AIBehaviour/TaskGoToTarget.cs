@@ -18,9 +18,8 @@ public class TaskGoToTarget : BasicNode
     {
         Transform target = (Transform)GetData("target");
 
-        if (Vector3.Distance(_transform.position, target.position) > 0.5f)
+        if (Vector3.Distance(_transform.position, target.position) > 1.5f)
         {
-            _agent.speed = GuardBT.Speed;
             _agent.destination = target.position;
         }
         State = NodeState.RUNNING;

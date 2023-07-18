@@ -22,21 +22,27 @@ public class TaskAttack : BasicNode
             return NodeState.FAILURE;
         }
 
-        bool canAttack = (bool)GetData("canAttack");
+        object canAttackObj = GetData("canAttack");
+
+        if (canAttackObj == null) return NodeState.FAILURE;
+
+        bool canAttack = (bool)canAttackObj;
 
         if (canAttack)
         {
-            bool? enemyIsDead = _enemyManager.TakeHit();
-            if (enemyIsDead.Value)
+            Debug.Log("Attack");
+            bool? enemyIsDead = _enemyManager?.TakeHit();
+            if (enemyIsDead.HasValue && enemyIsDead.Value)
             {
                 ClearData("target");
             }
 
             Parent.Parent.SetData("canAttack", false);
+            Parent.Parent.SetData("onCooldown", true);
             return NodeState.SUCCESS;
         }
 
-        State = NodeState.FAILURE;
+        State = NodeState.RUNNING;
         return State;
     }
 }

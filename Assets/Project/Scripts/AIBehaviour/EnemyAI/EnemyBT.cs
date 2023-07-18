@@ -23,6 +23,8 @@ public class EnemyBT : BasicTree, IProduct
     {
         _agent = GetComponent<NavMeshAgent>();
 
+        _agent.stoppingDistance = 1.5f;
+
         BasicNode root = new Selector(new List<BasicNode>
         {
             //new Sequence(new List<BasicNode>
@@ -32,21 +34,20 @@ public class EnemyBT : BasicTree, IProduct
                 
 
             //}),
+            new Sequence(new List<BasicNode> {
+                new CheckEnemyInAttackRange(transform),
+                new TaskAttack()
+            }),
+            new Sequence(new List<BasicNode> {
+                    new TaskIsAbleToAttack(),
+                    new TaskGoToTarget(transform, _agent),
+            }),
             new Sequence(new List<BasicNode>
             {
                 new CheckEnemyInFOVRange(transform, _enemyLayerMask),
                 new TaskKeepDistance(_agent, transform, _distanceToKeep),
                 new TaskSurroundTarget(transform, _agent, _distanceToKeep, _minRange, _maxRange),
-                new Sequence(new List<BasicNode> {
-                    new TaskIsAbleToAttack(),
-                    new TaskGoToTarget(transform, _agent),
-                })
                 //new TaskGoToTarget(transform, _agent),
-
-            }),
-            new Sequence(new List<BasicNode>{
-                new CheckEnemyInAttackRange(transform),
-                new TaskAttack()
             }),
             new TaskPatrol(transform, _waypoints, _agent),
         });

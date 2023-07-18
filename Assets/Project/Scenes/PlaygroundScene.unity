@@ -210,17 +210,17 @@ PrefabInstance:
     - target: {fileID: 2482698503916093252, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000018428029
+      value: -0.000000018428027
       objectReference: {fileID: 0}
     - target: {fileID: 2482698503916093252, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000055210654
+      value: 0.0000000055210645
       objectReference: {fileID: 0}
     - target: {fileID: 2482698503963536687, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.11775909
+      value: 0.11775908
       objectReference: {fileID: 0}
     - target: {fileID: 2482698503963536687, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
@@ -317,7 +317,7 @@ MonoBehaviour:
   - {fileID: 2006919261}
   - {fileID: 1319254657}
   _enemy: {fileID: 6277912375836810856, guid: 268572da0fae74668ba4ba2403fca433, type: 3}
-  _minEnemyLoaded: 1
+  _minEnemyLoaded: 10
   _enemyFactory: {fileID: 11400000, guid: 2d9c75d1fa66948d3bde3a26b7938824, type: 2}
 --- !u!4 &226208958
 Transform:
@@ -446,7 +446,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.21201204, y: 0, z: 0, w: 0.9772671}
+  m_LocalRotation: {x: 0.21201202, y: 0, z: 0, w: 0.9772671}
   m_LocalPosition: {x: 0, y: 5.82, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

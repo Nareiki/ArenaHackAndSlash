@@ -13,6 +13,7 @@ public class TaskIsAbleToAttack : BasicNode
     private float _cooldownCounter = 0f;
 
     private bool _canAttack = false;
+    private bool _onCooldown = false;
 
 
     public override NodeState Evaluate()
@@ -22,40 +23,57 @@ public class TaskIsAbleToAttack : BasicNode
         {
             _lastTarget = target;
         }
-        if (target == null)
+
+        //TODO: Fix bug with setting Data
+        object canAttackObj = GetData("canAttack");
+
+        object onCooldownObj = GetData("onCooldown");
+
+        if (onCooldownObj != null)
         {
-            Parent.Parent.Parent.ClearData("canAttack");
+            _onCooldown = (bool)onCooldownObj;
+        }
+
+        if (canAttackObj != null)
+        {
+            _canAttack = (bool)canAttackObj;
+        }
+        else
+        {
+            return NodeState.FAILURE;
         }
 
         _attackCounter += Time.deltaTime;
 
-        //TODO: Fix bug with setting Data
-        _canAttack = (bool)GetData("canAttack") ? true : false;
-
-        if (_canAttack)
-        {
-            return NodeState.RUNNING;
-        }
-
         if (_attackCounter >= _attackTime)
         {
-            if (_cooldownCounter <= _cooldownTime)
+            if (_canAttack)
             {
-                _cooldownCounter += Time.deltaTime;
-                return NodeState.FAILURE;
+                return NodeState.SUCCESS;
             }
-            else
+            if (_onCooldown)
             {
-                _cooldownCounter = 0f;
-                _attackCounter = 0f;
+                if (_cooldownCounter <= _cooldownTime)
+                {
+                    _cooldownCounter += Time.deltaTime;
+                    return NodeState.FAILURE;
+                }
+                else
+                {
+                    _cooldownCounter = 0f;
+                    _attackCounter = 0f;
+                    Parent.Parent.SetData("onCooldown", false);
+                    return NodeState.RUNNING;
+                }
             }
-            Parent.Parent.Parent.SetData("canAttack", true);
+            Parent.Parent.SetData("onCooldown", false);
+            Parent.Parent.SetData("canAttack", true);
+
             Debug.Log("Can Attack");
             return NodeState.SUCCESS;
         }
 
-
         Debug.Log("cannot Attack");
-        return NodeState.RUNNING;
+        return _canAttack ? NodeState.RUNNING : NodeState.FAILURE;
     }
 }
