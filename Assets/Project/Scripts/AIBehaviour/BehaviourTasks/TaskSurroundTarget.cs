@@ -10,20 +10,20 @@ public class TaskSurroundTarget : BasicNode
     private float _distanceToKeep;
     private float _timer = 0f;
     private float _maxTimeForDirection;
-    private float _rangeMin, _rangeMax;
-    private Quaternion angle;
+    private float _timeRangeMin, _timeRangeMax;
+    private Quaternion _angle;
 
 
 
-    public TaskSurroundTarget(Transform transform, NavMeshAgent agent, float distanceToKeep, float rangeMin, float rangeMax)
+    public TaskSurroundTarget(Transform transform, NavMeshAgent agent, float distanceToKeep, float timeRangeMin, float timeRangeMax, float angle)
     {
         _transform = transform;
         _agent = agent;
         _distanceToKeep = distanceToKeep;
-        _rangeMin = rangeMin;
-        _rangeMax = rangeMax;
-        _maxTimeForDirection = Random.Range(rangeMin, rangeMax);
-        angle = Quaternion.Euler(0f, 20, 0f);
+        _timeRangeMin = timeRangeMin;
+        _timeRangeMax = timeRangeMax;
+        _maxTimeForDirection = Random.Range(timeRangeMin, timeRangeMax);
+        _angle = Quaternion.Euler(0f, angle, 0f);
     }
 
 
@@ -32,25 +32,20 @@ public class TaskSurroundTarget : BasicNode
         if (_timer > _maxTimeForDirection)
         {
             _timer = 0f;
-            _maxTimeForDirection = Random.Range(_rangeMin, _rangeMax);
-            angle = Quaternion.Inverse(angle);
+            _maxTimeForDirection = Random.Range(_timeRangeMin, _timeRangeMax);
+            _angle = Quaternion.Inverse(_angle);
         }
-
+        //TODO: Blackboard
         Transform target = (Transform)GetData("target");
 
         Vector3 direction = (_transform.position - target.position).normalized;
-        Vector3 newPosition = target.position + angle * direction * _distanceToKeep;
-
-        //Debug.DrawLine(direction, direction + Vector3.up, Color.red, 10f);
-        //Debug.DrawLine(newPosition, newPosition + Vector3.up, Color.green, 10f);
-
+        Vector3 newPosition = target.position + _angle * direction * _distanceToKeep;
 
         _agent.destination = newPosition;//Vector3.Slerp(_transform.position, newPosition, timer);
 
-
         _timer += Time.deltaTime;
 
-        return NodeState.SUCCESS;
+        return State = NodeState.SUCCESS;
     }
 }
 

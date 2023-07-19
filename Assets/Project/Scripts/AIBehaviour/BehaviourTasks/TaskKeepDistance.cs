@@ -12,26 +12,22 @@ public class TaskKeepDistance : BasicNode
 
     private float radiusToMove = 0f;
 
-
-
-    public TaskKeepDistance(NavMeshAgent agent, Transform transform, float distance)
+    public TaskKeepDistance(NavMeshAgent agent, Transform transform, float distance, float rangeBuffer)
     {
         _agent = agent;
         _transform = transform;
         _distanceToKeep = distance;
-        _distanceWithBuffer = _distanceToKeep + 1f;
+        _distanceWithBuffer = _distanceToKeep + rangeBuffer;
     }
-
-
 
     public override NodeState Evaluate()
     {
+        //TODO: Blackboard
         Transform target = (Transform)GetData("target");
 
         if (target != null)
         {
             radiusToMove = Vector3.Distance(_transform.position, target.position);
-
 
             if (radiusToMove <= _distanceWithBuffer)
             {
@@ -41,13 +37,11 @@ public class TaskKeepDistance : BasicNode
 
                 _agent.destination = newPosition;
 
-                //Debug.Log(" old Position " + _transform.position + "\n| target position " + target.position + "\n| new Position " + newPosition + "\n agent Destination " + _agent.destination);
-
-                return NodeState.SUCCESS;
+                return State = NodeState.SUCCESS;
             }
         }
 
-        return NodeState.FAILURE;
+        return State = NodeState.FAILURE;
     }
 
 }

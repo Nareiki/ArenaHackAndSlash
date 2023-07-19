@@ -8,38 +8,37 @@ public class GuardBT : BasicTree
 {
 
     private NavMeshAgent _agent;
-    [SerializeField] private Transform[] _waypoints;
-
-    public static float Speed = 2f;
-
-    public static float FovRange = 6f;
-
-    public static float AttackRange = 2f;
-
     private LayerMask _enemyLayerMask = 1 << 16;
+
+    [SerializeField] private Transform[] _waypoints;
+    [SerializeField] private float _fovRange = 6f;
+    [SerializeField] private float _attackRange = 2f;
+    [SerializeField] private float _rangeBuffer = 2f;
+    [SerializeField] private float _targetReachedRange = 1.5f;
+    [SerializeField] private float _waitTime = 1f;
 
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
+
         BasicNode root = new Selector(new List<BasicNode>
         {
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInAttackRange(transform),
+                new CheckEnemyInAttackRange(transform, _attackRange),
                 new TaskAttack(),
             }),
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInFOVRange(transform, _enemyLayerMask),
-                new TaskGoToTarget(transform, _agent),
+                new CheckEnemyInFOVRange(transform, _enemyLayerMask, _fovRange, _rangeBuffer),
+                new TaskGoToTarget(transform, _agent, _targetReachedRange),
 
             }),
-            new TaskPatrol(transform, _waypoints, _agent),
+            new TaskPatrol(transform, _waypoints, _agent, _waitTime),
         });
-        //BasicNode root = new TaskPatrol(transform, Waypoints, _agent);
         return root;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(transform.position, GuardBT.FovRange);
+        Gizmos.DrawSphere(transform.position, _fovRange);
     }
 }

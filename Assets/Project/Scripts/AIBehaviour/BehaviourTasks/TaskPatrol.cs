@@ -18,11 +18,12 @@ public class TaskPatrol : BasicNode
     private float _waitCounter = 0f;
     private bool _waiting = false;
 
-    public TaskPatrol(Transform transform, Transform[] waypoints, NavMeshAgent agent)
+    public TaskPatrol(Transform transform, Transform[] waypoints, NavMeshAgent agent, float waitTime)
     {
         _transform = transform;
         _waypoints = waypoints;
         _agent = agent;
+        _waitTime = waitTime;
     }
 
     public override NodeState Evaluate()
@@ -51,12 +52,9 @@ public class TaskPatrol : BasicNode
                 _agent.destination = wp.position;
                 /*_transform.position = Vector3.MoveTowards(_transform.position, wp.position, GuardBT.Speed * Time.deltaTime);
                 _transform.LookAt(wp.position);*/
-
             }
         }
 
-
-        State = NodeState.RUNNING;
-        return State;
+        return State = NodeState.RUNNING;
     }
 }

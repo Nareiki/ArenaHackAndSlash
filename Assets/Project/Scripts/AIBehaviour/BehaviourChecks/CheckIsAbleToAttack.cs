@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TaskIsAbleToAttack : BasicNode
+public class CheckIsAbleToAttack : BasicNode
 {
     private Transform _lastTarget;
 
@@ -18,15 +18,16 @@ public class TaskIsAbleToAttack : BasicNode
 
     public override NodeState Evaluate()
     {
+        //TODO: Blackboard
         Transform target = (Transform)GetData("target");
         if (target != _lastTarget)
         {
             _lastTarget = target;
         }
 
-        //TODO: Fix bug with setting Data
+        //TODO: Blackboard
         object canAttackObj = GetData("canAttack");
-
+        //TODO: Blackboard
         object onCooldownObj = GetData("onCooldown");
 
         if (onCooldownObj != null)
@@ -40,7 +41,7 @@ public class TaskIsAbleToAttack : BasicNode
         }
         else
         {
-            return NodeState.FAILURE;
+            return State = NodeState.FAILURE;
         }
 
         _attackCounter += Time.deltaTime;
@@ -49,29 +50,31 @@ public class TaskIsAbleToAttack : BasicNode
         {
             if (_canAttack)
             {
-                return NodeState.SUCCESS;
+                return State = NodeState.SUCCESS;
             }
             if (_onCooldown)
             {
                 if (_cooldownCounter <= _cooldownTime)
                 {
                     _cooldownCounter += Time.deltaTime;
-                    return NodeState.FAILURE;
+                    return State = NodeState.FAILURE;
                 }
                 else
                 {
                     _cooldownCounter = 0f;
                     _attackCounter = 0f;
+                    //TODO: Blackboard
                     Parent.Parent.SetData("onCooldown", false);
-                    return NodeState.RUNNING;
+                    return State = NodeState.RUNNING;
                 }
             }
+            //TODO: Blackboard
             Parent.Parent.SetData("onCooldown", false);
             Parent.Parent.SetData("canAttack", true);
 
-            return NodeState.SUCCESS;
+            return State = NodeState.SUCCESS;
         }
 
-        return _canAttack ? NodeState.RUNNING : NodeState.FAILURE;
+        return _canAttack ? State = NodeState.RUNNING : State = NodeState.FAILURE;
     }
 }

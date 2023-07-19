@@ -17,9 +17,9 @@ public class ObjectPooler : MonoBehaviour
 
     public static ObjectPooler SharedInstance;
 
-    private List<GameObject> _pooledObjects;
+    [SerializeField] private List<GameObject> _pooledObjects;
 
-    private List<ObjectPoolItem> _itemsToPool;
+    [SerializeField] private List<ObjectPoolItem> _itemsToPool;
 
     private void Awake()
     {

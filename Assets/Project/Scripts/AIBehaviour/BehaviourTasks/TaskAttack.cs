@@ -5,12 +5,11 @@ using UnityEngine;
 public class TaskAttack : BasicNode
 {
     private Transform _lastTarget;
-
-    //TODO: Make an Enemy Manager
-    private BasicEnemy _enemyManager;
+    private IDamageable _enemyManager;
 
     public override NodeState Evaluate()
     {
+        //TODO: Blackbord
         Transform target = (Transform)GetData("target");
         if (target != _lastTarget)
         {
@@ -19,12 +18,13 @@ public class TaskAttack : BasicNode
         }
         else if (target == null)
         {
-            return NodeState.FAILURE;
+            return State = NodeState.FAILURE;
         }
 
+        // TODO: Blackbord
         object canAttackObj = GetData("canAttack");
 
-        if (canAttackObj == null) return NodeState.FAILURE;
+        if (canAttackObj == null) return State = NodeState.FAILURE;
 
         bool canAttack = (bool)canAttackObj;
 
@@ -37,12 +37,12 @@ public class TaskAttack : BasicNode
                 ClearData("target");
             }
 
+            //TODO: Blackbord
             Parent.Parent.SetData("canAttack", false);
             Parent.Parent.SetData("onCooldown", true);
-            return NodeState.SUCCESS;
+            return State = NodeState.SUCCESS;
         }
 
-        State = NodeState.RUNNING;
-        return State;
+        return State = NodeState.RUNNING;
     }
 }

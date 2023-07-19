@@ -8,43 +8,43 @@ public class CheckEnemyInFOVRange : BasicNode
 {
     private Transform _transform;
     private LayerMask _enemyLayerMask;
+    private float _fovRange;
 
-    private float _distanceBuffer = 2f;
+    private float _fovRangeBuffer;
 
-    public CheckEnemyInFOVRange(Transform transform, LayerMask enemyLayerMask)
+    public CheckEnemyInFOVRange(Transform transform, LayerMask enemyLayerMask, float fovRange, float fovRangeBuffer)
     {
         _transform = transform;
         _enemyLayerMask = enemyLayerMask;
+        _fovRange = fovRange;
+        _fovRangeBuffer = fovRangeBuffer;
     }
 
     public override NodeState Evaluate()
     {
+        //TODO: Blackboard
         object t = GetData("target");
-        //Debug.Log(t);
         if (t == null)
         {
-            Collider[] colliders = Physics.OverlapSphere(_transform.position, GuardBT.FovRange, _enemyLayerMask);
+            Collider[] colliders = Physics.OverlapSphere(_transform.position, _fovRange, _enemyLayerMask);
             if (colliders.Length > 0)
             {
-                //TODO: Make Black Box for Data share
+                //TODO: Blackbord
                 Parent.Parent.SetData("target", colliders[0].transform);
                 Parent.Parent.SetData("canAttack", false);
-                State = NodeState.SUCCESS;
-                return State;
+                return State = NodeState.SUCCESS;
             }
 
-            State = NodeState.FAILURE;
-            return State;
+            return State = NodeState.FAILURE;
         }
         Transform target = (Transform)t;
-        if (Vector3.Distance(_transform.position, target.position) > GuardBT.FovRange + _distanceBuffer)
+        if (Vector3.Distance(_transform.position, target.position) > _fovRange + _fovRangeBuffer)
         {
+            //TODO: Blackbord
             ClearData("target");
-            State = NodeState.FAILURE;
-            return State;
+            return State = NodeState.FAILURE;
         }
 
-        State = NodeState.SUCCESS;
-        return State;
+        return State = NodeState.SUCCESS;
     }
 }

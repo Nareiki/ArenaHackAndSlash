@@ -5,10 +5,12 @@ using UnityEngine;
 public class CheckEnemyInAttackRange : BasicNode
 {
     private Transform _transform;
+    private float _attackRange = 1.5f;
 
-    public CheckEnemyInAttackRange(Transform transform)
+    public CheckEnemyInAttackRange(Transform transform, float attackRange)
     {
         _transform = transform;
+        _attackRange = attackRange;
     }
 
     public override NodeState Evaluate()
@@ -16,22 +18,19 @@ public class CheckEnemyInAttackRange : BasicNode
         object t = GetData("target");
         if (t == null)
         {
-            State = NodeState.FAILURE;
-            return State;
+            return State = NodeState.FAILURE;
         }
 
         Transform target = (Transform)t;
-        if (Vector3.Distance(_transform.position, target.position) <= 1.5f)
+        if (Vector3.Distance(_transform.position, target.position) <= _attackRange)
         {
             bool test = (bool)GetData("canAttack");
-            if (!test) return NodeState.FAILURE;
+            if (!test)
+                return State = NodeState.FAILURE;
 
-            //TODO: Do the Attacking
-            State = NodeState.SUCCESS;
-            return State;
+            return State = NodeState.SUCCESS;
         }
 
-        State = NodeState.FAILURE;
-        return State;
+        return State = NodeState.FAILURE;
     }
 }
