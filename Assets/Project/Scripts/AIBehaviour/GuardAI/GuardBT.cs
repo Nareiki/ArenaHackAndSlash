@@ -6,7 +6,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class GuardBT : BasicTree
 {
-
+    private Blackboard _guardBlackboard;
     private NavMeshAgent _agent;
     private LayerMask _enemyLayerMask = 1 << 16;
 
@@ -17,6 +17,7 @@ public class GuardBT : BasicTree
     [SerializeField] private float _targetReachedRange = 1.5f;
     [SerializeField] private float _waitTime = 1f;
 
+
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -24,15 +25,15 @@ public class GuardBT : BasicTree
         BasicNode root = new Selector(new List<BasicNode>
         {
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInAttackRange(transform, _attackRange),
-                new TaskAttack(),
+                new CheckEnemyInAttackRange(_guardBlackboard),
+                new TaskAttack(_guardBlackboard),
             }),
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInFOVRange(transform, _enemyLayerMask, _fovRange, _rangeBuffer),
-                new TaskGoToTarget(transform, _agent, _targetReachedRange),
+                new CheckEnemyInFOVRange(_guardBlackboard),
+                new TaskGoToTarget(_guardBlackboard),
 
             }),
-            new TaskPatrol(transform, _waypoints, _agent, _waitTime),
+            new TaskPatrol(_guardBlackboard),
         });
         return root;
     }

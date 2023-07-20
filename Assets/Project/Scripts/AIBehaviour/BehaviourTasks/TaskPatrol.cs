@@ -18,12 +18,12 @@ public class TaskPatrol : BasicNode
     private float _waitCounter = 0f;
     private bool _waiting = false;
 
-    public TaskPatrol(Transform transform, Transform[] waypoints, NavMeshAgent agent, float waitTime)
+    public TaskPatrol(Blackboard blackboard) : base(blackboard)
     {
-        _transform = transform;
-        _waypoints = waypoints;
-        _agent = agent;
-        _waitTime = waitTime;
+        _transform = blackboard.GetData<Transform>("transform");
+        _waypoints = blackboard.GetData<Transform[]>("waypoints");
+        _agent = blackboard.GetData<NavMeshAgent>("agent");
+        _waitTime = blackboard.GetData<float>("waitTimePerPoint");
     }
 
     public override NodeState Evaluate()

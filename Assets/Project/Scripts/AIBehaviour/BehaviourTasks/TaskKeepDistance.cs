@@ -9,27 +9,25 @@ public class TaskKeepDistance : BasicNode
     private Transform _transform;
     private float _distanceToKeep;
     private float _distanceWithBuffer;
+    private float _radiusToMove = 0f;
 
-    private float radiusToMove = 0f;
-
-    public TaskKeepDistance(NavMeshAgent agent, Transform transform, float distance, float rangeBuffer)
+    public TaskKeepDistance(Blackboard blackboard) : base(blackboard)
     {
-        _agent = agent;
-        _transform = transform;
-        _distanceToKeep = distance;
-        _distanceWithBuffer = _distanceToKeep + rangeBuffer;
+        _agent = blackboard.GetData<NavMeshAgent>("agent");
+        _transform = blackboard.GetData<Transform>("transform");
+        _distanceToKeep = blackboard.GetData<float>("distanceToKeep");
+        _distanceWithBuffer = _distanceToKeep + blackboard.GetData<float>("rangeBuffer");
     }
 
     public override NodeState Evaluate()
     {
-        //TODO: Blackboard
-        Transform target = (Transform)GetData("target");
+        Transform target = blackboard.GetData<Transform>("target");
 
         if (target != null)
         {
-            radiusToMove = Vector3.Distance(_transform.position, target.position);
+            _radiusToMove = Vector3.Distance(_transform.position, target.position);
 
-            if (radiusToMove <= _distanceWithBuffer)
+            if (_radiusToMove <= _distanceWithBuffer)
             {
                 //Calculate direction and distance to move around the target
                 Vector3 direction = (_transform.position - target.position).normalized;

@@ -1,7 +1,3 @@
-using System.Transactions;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckEnemyInFOVRange : BasicNode
@@ -12,36 +8,32 @@ public class CheckEnemyInFOVRange : BasicNode
 
     private float _fovRangeBuffer;
 
-    public CheckEnemyInFOVRange(Transform transform, LayerMask enemyLayerMask, float fovRange, float fovRangeBuffer)
+    public CheckEnemyInFOVRange(Blackboard blackboard) : base(blackboard)
     {
-        _transform = transform;
-        _enemyLayerMask = enemyLayerMask;
-        _fovRange = fovRange;
-        _fovRangeBuffer = fovRangeBuffer;
+        _transform = blackboard.GetData<Transform>("transform");
+        _enemyLayerMask = blackboard.GetData<LayerMask>("enemyLayerMask");
+        _fovRange = blackboard.GetData<float>("fovRange");
+        _fovRangeBuffer = blackboard.GetData<float>("rangeBuffer");
     }
 
     public override NodeState Evaluate()
     {
-        //TODO: Blackboard
-        object t = GetData("target");
-        if (t == null)
+        Transform target = blackboard.GetData<Transform>("target");
+        if (target == null)
         {
             Collider[] colliders = Physics.OverlapSphere(_transform.position, _fovRange, _enemyLayerMask);
             if (colliders.Length > 0)
             {
-                //TODO: Blackbord
-                Parent.Parent.SetData("target", colliders[0].transform);
-                Parent.Parent.SetData("canAttack", false);
+                blackboard.SetData("target", colliders[0].transform);
+                blackboard.SetData("canAttack", false);
                 return State = NodeState.SUCCESS;
             }
 
             return State = NodeState.FAILURE;
         }
-        Transform target = (Transform)t;
         if (Vector3.Distance(_transform.position, target.position) > _fovRange + _fovRangeBuffer)
         {
-            //TODO: Blackbord
-            ClearData("target");
+            blackboard.ResetData("target");
             return State = NodeState.FAILURE;
         }
 

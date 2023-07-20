@@ -7,10 +7,11 @@ public class TaskAttack : BasicNode
     private Transform _lastTarget;
     private IDamageable _enemyManager;
 
+    public TaskAttack(Blackboard blackboard) : base(blackboard) { }
+
     public override NodeState Evaluate()
     {
-        //TODO: Blackbord
-        Transform target = (Transform)GetData("target");
+        Transform target = blackboard.GetData<Transform>("target");// (Transform)GetData("target");
         if (target != _lastTarget)
         {
             _enemyManager = target.GetComponent<BasicEnemy>();
@@ -21,8 +22,7 @@ public class TaskAttack : BasicNode
             return State = NodeState.FAILURE;
         }
 
-        // TODO: Blackbord
-        object canAttackObj = GetData("canAttack");
+        object canAttackObj = blackboard.GetData<bool>("canAttack"); // GetData("canAttack");
 
         if (canAttackObj == null) return State = NodeState.FAILURE;
 
@@ -30,16 +30,14 @@ public class TaskAttack : BasicNode
 
         if (canAttack)
         {
-            Debug.Log("Attack");
             bool? enemyIsDead = _enemyManager?.TakeHit();
             if (enemyIsDead.HasValue && enemyIsDead.Value)
             {
-                ClearData("target");
+                blackboard.ResetData("target");
             }
 
-            //TODO: Blackbord
-            Parent.Parent.SetData("canAttack", false);
-            Parent.Parent.SetData("onCooldown", true);
+            blackboard.SetData("canAttack", false);
+            blackboard.SetData("onCooldown", true);
             return State = NodeState.SUCCESS;
         }
 

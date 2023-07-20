@@ -7,24 +7,23 @@ public class CheckEnemyInAttackRange : BasicNode
     private Transform _transform;
     private float _attackRange = 1.5f;
 
-    public CheckEnemyInAttackRange(Transform transform, float attackRange)
+    public CheckEnemyInAttackRange(Blackboard blackboard) : base(blackboard)
     {
-        _transform = transform;
-        _attackRange = attackRange;
+        _transform = blackboard.GetData<Transform>("transform");
+        _attackRange = blackboard.GetData<float>("attackRange");
     }
 
     public override NodeState Evaluate()
     {
-        object t = GetData("target");
-        if (t == null)
+        Transform target = blackboard.GetData<Transform>("target");
+        if (target == null)
         {
             return State = NodeState.FAILURE;
         }
 
-        Transform target = (Transform)t;
         if (Vector3.Distance(_transform.position, target.position) <= _attackRange)
         {
-            bool test = (bool)GetData("canAttack");
+            bool test = blackboard.GetData<bool>("canAttack");
             if (!test)
                 return State = NodeState.FAILURE;
 

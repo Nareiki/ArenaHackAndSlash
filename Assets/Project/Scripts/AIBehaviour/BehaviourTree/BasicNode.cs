@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,12 +20,16 @@ public class BasicNode
 
     public virtual NodeState Evaluate() => NodeState.FAILURE;
 
-    private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
+    protected Blackboard blackboard;
 
     public BasicNode()
     {
         Parent = null;
+    }
 
+    public BasicNode(Blackboard blackboard)
+    {
+        this.blackboard = blackboard;
     }
 
     public BasicNode(List<BasicNode> children)
@@ -40,42 +45,5 @@ public class BasicNode
     {
         node.Parent = this;
         Children.Add(node);
-    }
-
-    public void SetData(string key, object value)
-    {
-        _dataContext[key] = value;
-    }
-
-    public object GetData(string key)
-    {
-        object val = null;
-
-        if (_dataContext.TryGetValue(key, out val))
-            return val;
-
-        BasicNode node = Parent;
-
-        if (Parent != null)
-            val = node.GetData(key);
-
-        return val;
-    }
-
-    public bool ClearData(string key)
-    {
-        bool cleared = false;
-        if (_dataContext.ContainsKey(key))
-        {
-            _dataContext.Remove(key);
-            return true;
-        }
-
-        BasicNode node = Parent;
-
-        if (node != null)
-            cleared = node.ClearData(key);
-
-        return cleared;
     }
 }

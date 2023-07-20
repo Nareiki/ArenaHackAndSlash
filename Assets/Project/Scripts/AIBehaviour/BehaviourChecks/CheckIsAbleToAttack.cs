@@ -15,34 +15,20 @@ public class CheckIsAbleToAttack : BasicNode
     private bool _canAttack = false;
     private bool _onCooldown = false;
 
+    public CheckIsAbleToAttack(Blackboard blackboard) : base(blackboard)
+    {
+    }
 
     public override NodeState Evaluate()
     {
-        //TODO: Blackboard
-        Transform target = (Transform)GetData("target");
+        Transform target = blackboard.GetData<Transform>("target");
         if (target != _lastTarget)
         {
             _lastTarget = target;
         }
 
-        //TODO: Blackboard
-        object canAttackObj = GetData("canAttack");
-        //TODO: Blackboard
-        object onCooldownObj = GetData("onCooldown");
-
-        if (onCooldownObj != null)
-        {
-            _onCooldown = (bool)onCooldownObj;
-        }
-
-        if (canAttackObj != null)
-        {
-            _canAttack = (bool)canAttackObj;
-        }
-        else
-        {
-            return State = NodeState.FAILURE;
-        }
+        _canAttack = blackboard.GetData<bool>("canAttack");
+        _onCooldown = blackboard.GetData<bool>("onCooldown");
 
         _attackCounter += Time.deltaTime;
 
@@ -63,15 +49,13 @@ public class CheckIsAbleToAttack : BasicNode
                 {
                     _cooldownCounter = 0f;
                     _attackCounter = 0f;
-                    //TODO: Blackboard
-                    Parent.Parent.SetData("onCooldown", false);
+                    blackboard.SetData("onCooldown", false);
                     return State = NodeState.RUNNING;
                 }
             }
-            //TODO: Blackboard
-            Parent.Parent.SetData("onCooldown", false);
-            Parent.Parent.SetData("canAttack", true);
 
+            blackboard.SetData("onCooldown", false);
+            blackboard.SetData("canAttack", true);
             return State = NodeState.SUCCESS;
         }
 

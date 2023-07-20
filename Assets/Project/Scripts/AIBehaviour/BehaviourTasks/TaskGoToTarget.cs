@@ -9,20 +9,20 @@ public class TaskGoToTarget : BasicNode
     private NavMeshAgent _agent;
     private float _targetReachedRange;
 
-    public TaskGoToTarget(Transform transform, NavMeshAgent agent, float targetReachedRange)
+    public TaskGoToTarget(Blackboard blackboard) : base(blackboard)
     {
-        _transform = transform;
-        _agent = agent;
-        _targetReachedRange = targetReachedRange;
+        _transform = blackboard.GetData<Transform>("transform");
+        _agent = blackboard.GetData<NavMeshAgent>("agent");
+        _targetReachedRange = blackboard.GetData<float>("targetReachedRange");
     }
 
     public override NodeState Evaluate()
     {
-        Transform target = (Transform)GetData("target");
+        Transform target = blackboard.GetData<Transform>("target");
 
         if (target == null)
         {
-            ClearData("target");
+            blackboard.ResetData("target");
             return State = NodeState.FAILURE;
         }
 

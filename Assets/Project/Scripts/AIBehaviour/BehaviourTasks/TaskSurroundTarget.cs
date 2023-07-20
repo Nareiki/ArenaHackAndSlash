@@ -15,15 +15,15 @@ public class TaskSurroundTarget : BasicNode
 
 
 
-    public TaskSurroundTarget(Transform transform, NavMeshAgent agent, float distanceToKeep, float timeRangeMin, float timeRangeMax, float angle)
+    public TaskSurroundTarget(Blackboard blackboard) : base(blackboard)
     {
-        _transform = transform;
-        _agent = agent;
-        _distanceToKeep = distanceToKeep;
-        _timeRangeMin = timeRangeMin;
-        _timeRangeMax = timeRangeMax;
-        _maxTimeForDirection = Random.Range(timeRangeMin, timeRangeMax);
-        _angle = Quaternion.Euler(0f, angle, 0f);
+        _transform = blackboard.GetData<Transform>("transform");
+        _agent = blackboard.GetData<NavMeshAgent>("agent");
+        _distanceToKeep = blackboard.GetData<float>("distanceToKeep");
+        _timeRangeMin = blackboard.GetData<float>("minRange");
+        _timeRangeMax = blackboard.GetData<float>("maxRange");
+        _maxTimeForDirection = Random.Range(_timeRangeMin, _timeRangeMax);
+        _angle = Quaternion.Euler(0f, blackboard.GetData<float>("angle"), 0f);
     }
 
 
@@ -35,8 +35,9 @@ public class TaskSurroundTarget : BasicNode
             _maxTimeForDirection = Random.Range(_timeRangeMin, _timeRangeMax);
             _angle = Quaternion.Inverse(_angle);
         }
+
         //TODO: Blackboard
-        Transform target = (Transform)GetData("target");
+        Transform target = blackboard.GetData<Transform>("target");
 
         Vector3 direction = (_transform.position - target.position).normalized;
         Vector3 newPosition = target.position + _angle * direction * _distanceToKeep;
