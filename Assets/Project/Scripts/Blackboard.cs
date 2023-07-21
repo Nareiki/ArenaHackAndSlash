@@ -6,6 +6,11 @@ public class Blackboard
 {
     private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
 
+    public Blackboard(Dictionary<string, object> dict)
+    {
+        _dataContext = dict;
+    }
+
     public void SetData(string key, object value)
     {
         _dataContext[key] = value;
