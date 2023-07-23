@@ -6,7 +6,7 @@ public class CheckIsAbleToAttack : BasicNode
 {
     private Transform _lastTarget;
 
-    private float _attackTime = 1f;
+    private float _attackSpeed = 1f;
     private float _attackCounter = 0f;
 
     private float _cooldownTime = 5f;
@@ -17,6 +17,10 @@ public class CheckIsAbleToAttack : BasicNode
 
     public CheckIsAbleToAttack(Blackboard blackboard) : base(blackboard)
     {
+        _attackSpeed = blackboard.GetData<float>("attackSpeed");
+        _cooldownTime = blackboard.GetData<float>("cooldownTime");
+        _canAttack = blackboard.GetData<bool>("canAttack");
+        _onCooldown = blackboard.GetData<bool>("onCooldown");
     }
 
     public override NodeState Evaluate()
@@ -27,12 +31,9 @@ public class CheckIsAbleToAttack : BasicNode
             _lastTarget = target;
         }
 
-        _canAttack = blackboard.GetData<bool>("canAttack");
-        _onCooldown = blackboard.GetData<bool>("onCooldown");
-
         _attackCounter += Time.deltaTime;
 
-        if (_attackCounter >= _attackTime)
+        if (_attackCounter >= _attackSpeed)
         {
             if (_canAttack)
             {

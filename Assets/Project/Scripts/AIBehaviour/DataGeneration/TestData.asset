@@ -10,5 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b48bb62fc35c04819aa6ab28ed69d09e, type: 3}
-  m_Name: DataHolder
+  m_Name: TestData
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 163840
+  waypoints: []
+  minRange: 1
+  maxRange: 5
+  angle: 20
+  attackRange: 1.5
+  targetReachedRange: 1.5
+  fovRange: 6
+  rangeBuffer: 6
+  distanceToKeep: 6
+  waitTimePerPoint: 1.5
+  outOfRangeTime: 2

@@ -42,7 +42,7 @@ public class DataBehaviourBase : ScriptableObject
 
         foreach (var field in fields)
         {
-            Debug.Log(field.Name + "  " + field.GetValue(this));
+            //Debug.Log(field.Name + "  " + field.GetValue(this));
             tempDict.Add(field.Name, field.GetValue(this));
         }
         return tempDict;

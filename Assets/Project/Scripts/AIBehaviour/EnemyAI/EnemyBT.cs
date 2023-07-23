@@ -58,4 +58,9 @@ public class EnemyBT : BasicTree, IProduct
         Initialize();
         //_waypoints = waypoints;
     }
+
+    public BasicNode TestTree()
+    {
+        return SetupTree();
+    }
 }
