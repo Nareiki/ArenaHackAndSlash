@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CheckEnemyInFOVRange : BasicNode
 {
+    [NonReflectionValue]
     private Transform _transform;
     private LayerMask _enemyLayerMask;
     private float _fovRange;
@@ -13,7 +14,7 @@ public class CheckEnemyInFOVRange : BasicNode
         _transform = blackboard.GetData<Transform>("transform");
         _enemyLayerMask = blackboard.GetData<LayerMask>("enemyLayerMask");
         _fovRange = blackboard.GetData<float>("fovRange");
-        _fovRangeBuffer = blackboard.GetData<float>("rangeBuffer");
+        _fovRangeBuffer = blackboard.GetData<float>("fovRangeBuffer");
     }
 
     public override NodeState Evaluate()

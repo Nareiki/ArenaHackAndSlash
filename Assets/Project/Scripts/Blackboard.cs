@@ -23,9 +23,12 @@ public class Blackboard
         if (_dataContext.ContainsKey(key))
             return (T)_dataContext[key];
         else
-            Debug.LogError($"Key: {key} not found!");
-
-        return val;
+        {
+            Debug.LogWarning($"Key: {key} not found!");
+            T valueToAdd = default;
+            _dataContext.Add(key, valueToAdd);
+            return valueToAdd;
+        }
     }
 
     public object GetData(string key)

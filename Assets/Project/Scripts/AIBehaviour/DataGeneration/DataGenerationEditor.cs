@@ -35,6 +35,7 @@ public class DataGenerationEditor : EditorWindow
             if (_root != null && _nodeDataContainer != null)
             {
                 ExtractNodeData(_root, _nodeDataContainer);
+                CreateScriptableObjectInstance(dataFromNodes);
                 Debug.Log(dataFromNodes);
                 Debug.Log("Node data extracted and saved into the ScriptableObject");
             }
@@ -43,6 +44,23 @@ public class DataGenerationEditor : EditorWindow
                 Debug.LogError("Please assign both the root and the ScriptableObject before extracting");
             }
         }
+    }
+
+    private void CreateScriptableObjectInstance(Dictionary<string, object> data)
+    {
+        // Create a new instance of MyScriptableObject
+        ScriptableObjectBase newObject = ScriptableObject.CreateInstance<ScriptableObjectBase>();
+
+        // Optionally, initialize fields in the new object
+        // newObject.myString = "Hello";
+        // newObject.myInt = 42;
+        // newObject.myVector = Vector3.up;
+
+        // Save the instance as an asset file (optional, but can be useful)
+        string path = "Assets/NewMyScriptableObject.asset";
+        AssetDatabase.CreateAsset(newObject, path);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     private void ExtractNodeData(BasicTree root, ScriptableObject container)
@@ -54,7 +72,7 @@ public class DataGenerationEditor : EditorWindow
         // You can modify this based on the actual data you want to extract.
         Type type = root.GetType();
 
-        MethodInfo info = type.GetMethod("SetupTree", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        MethodInfo info = type.GetMethod("SetupTree", BindingFlags.NonPublic | BindingFlags.Instance);
         BasicNode tree = new BasicNode();
         if (info != null)
         {
@@ -66,48 +84,11 @@ public class DataGenerationEditor : EditorWindow
 
         BindingFlags nonPubFields = BindingFlags.Instance | BindingFlags.NonPublic;
 
-        GetAllNodesFromNodeList(tree, nonPubFields, "Children");
+        GetAllNodesFromParentNode(tree, nonPubFields, "Children");
 
-        //List<BasicNode> test2 = GetProtectedFieldValueOfTree<List<BasicNode>>(tree, nonPubFields, "Children");
-
-        //foreach (var node in test2)
-        //{
-        //    List<BasicNode> childrenNodes = GetProtectedFieldValueOfTree<List<BasicNode>>(node, nonPubFields, "Children");
-        //    if (childrenNodes.Count > 0)
-        //    {
-        //        foreach (var childNode in childrenNodes)
-        //        {
-
-        //        }
-        //    }
-        //    Debug.Log(node);
-        //}
-
-
-
-        //foreach (var node in tree.Children)
-        //{
-
-        //}
-
-
-        //root.Setup
-
-        //ScriptableObject dataContainer = container as ScriptableObject;
-        //dataContainer.nodeNames.Add(root.name);
-        //dataContainer.nodeValues.Add(node.GetValue());
-        //dataContainer.nodePositions.Add(node.transform.position);
-
-        //if (node.children != null)
-        //{
-        //    foreach (BasicNode childNode in node.children)
-        //    {
-        //        ExtractNodeData(childNode, container);
-        //    }
-        //}
     }
 
-    private void GetAllNodesFromNodeList<T>(T node, BindingFlags flags, string field)
+    private void GetAllNodesFromParentNode<T>(T node, BindingFlags flags, string field)
     {
         List<T> list = GetProtectedFieldValueOfTree<List<T>>(node, flags, field);
 
@@ -116,8 +97,8 @@ public class DataGenerationEditor : EditorWindow
             foreach (var item in list)
             {
                 Debug.Log(item);
-                GetAllFieldsOfClass(item);
-                GetAllNodesFromNodeList(item, flags, field);
+                GetAllFieldsOfClass(item, flags);
+                GetAllNodesFromParentNode(item, flags, field);
             }
 
         }
@@ -133,9 +114,8 @@ public class DataGenerationEditor : EditorWindow
         return test2;
     }
 
-    private void GetAllFieldsOfClass<T>(T extractionClass)
+    private void GetAllFieldsOfClass<T>(T extractionClass, BindingFlags flags)
     {
-        BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         Type typeOfClass = extractionClass.GetType();
 
         FieldInfo[] allFields = typeOfClass.GetFields(flags);
@@ -143,9 +123,13 @@ public class DataGenerationEditor : EditorWindow
         foreach (var field in allFields)
         {
             Debug.Log(field.GetValue(extractionClass));
-            if (!dataFromNodes.ContainsKey(field.Name))
+            string keyToAdd = field.Name.Substring(1);
+            if (!dataFromNodes.ContainsKey(keyToAdd))
             {
-                dataFromNodes.Add(field.Name, field.GetValue(extractionClass));
+                if (field.GetCustomAttribute<NonReflectionValue>() == null)
+                {
+                    dataFromNodes.Add(keyToAdd, field.GetValue(extractionClass));
+                }
             }
         }
     }

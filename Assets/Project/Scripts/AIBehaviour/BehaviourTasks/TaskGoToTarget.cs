@@ -5,7 +5,9 @@ using UnityEngine.AI;
 
 public class TaskGoToTarget : BasicNode
 {
+    [NonReflectionValue]
     private Transform _transform;
+    [NonReflectionValue]
     private NavMeshAgent _agent;
     private float _targetReachedRange;
 

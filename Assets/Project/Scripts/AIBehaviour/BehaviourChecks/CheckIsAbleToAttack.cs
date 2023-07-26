@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class CheckIsAbleToAttack : BasicNode
 {
+    [NonReflectionValue]
     private Transform _lastTarget;
+    [NonReflectionValue]
+    private float _attackCounter = 0f;
+    [NonReflectionValue]
+    private float _cooldownCounter = 0f;
+    [NonReflectionValue]
+    private bool _canAttack = false;
+    [NonReflectionValue]
+    private bool _onCooldown = false;
 
     private float _attackSpeed = 1f;
-    private float _attackCounter = 0f;
-
     private float _cooldownTime = 5f;
-    private float _cooldownCounter = 0f;
 
-    private bool _canAttack = false;
-    private bool _onCooldown = false;
 
     public CheckIsAbleToAttack(Blackboard blackboard) : base(blackboard)
     {
         _attackSpeed = blackboard.GetData<float>("attackSpeed");
         _cooldownTime = blackboard.GetData<float>("cooldownTime");
-        _canAttack = blackboard.GetData<bool>("canAttack");
-        _onCooldown = blackboard.GetData<bool>("onCooldown");
     }
 
     public override NodeState Evaluate()
@@ -30,6 +32,9 @@ public class CheckIsAbleToAttack : BasicNode
         {
             _lastTarget = target;
         }
+
+        _canAttack = blackboard.GetData<bool>("canAttack");
+        _onCooldown = blackboard.GetData<bool>("onCooldown");
 
         _attackCounter += Time.deltaTime;
 
@@ -54,7 +59,6 @@ public class CheckIsAbleToAttack : BasicNode
                     return State = NodeState.RUNNING;
                 }
             }
-
             blackboard.SetData("onCooldown", false);
             blackboard.SetData("canAttack", true);
             return State = NodeState.SUCCESS;

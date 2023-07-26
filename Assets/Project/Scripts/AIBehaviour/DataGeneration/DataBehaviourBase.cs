@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,21 +25,27 @@ public class DataBehaviourBase : ScriptableObject
     public float targetReachedRange = 1.5f;
     [Header("Fov Range")]
     public float fovRange = 6f;
-    public float rangeBuffer = 6f;
+    public float fovRangeBuffer = 6f;
     [Header("Distance to keep")]
     public float distanceToKeep = 6f;
     [Header("PatrolWaitTime")]
     public float waitTimePerPoint = 1.5f;
     [Header("Time the enemy takes to loose interest")]
     public float outOfRangeTime = 2f;
+    [Header("Attack Speed of BT")]
+    public float attackSpeed = 1f;
+    [Header("Cooldown Time between attacks")]
+    public float cooldownTime = 5f;
 
-
-    public Dictionary<string, object> GetAttributes(NavMeshAgent agent)
+    public Dictionary<string, object> GetAttributes(NavMeshAgent agent, Transform transform)
     {
         this.agent = agent;
-        Dictionary<string, object> tempDict = new Dictionary<string, object>();
+        Dictionary<string, object> tempDict = new Dictionary<string, object>
+        {
+            { "transform", transform }
+        };
 
-        var fields = thisType.GetFields();
+        var fields = thisType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
         foreach (var field in fields)
         {

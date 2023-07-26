@@ -12,14 +12,15 @@ public enum NodeState
 
 public class BasicNode
 {
+    [NonReflectionValue]
     protected NodeState State;
 
     public BasicNode Parent;
-
+    [NonReflectionValue]
     protected List<BasicNode> Children = new List<BasicNode>();
 
     public virtual NodeState Evaluate() => NodeState.FAILURE;
-
+    [NonReflectionValue]
     protected Blackboard blackboard;
 
     public BasicNode()

@@ -5,14 +5,18 @@ using Cinemachine.Utility;
 
 public class TaskSurroundTarget : BasicNode
 {
+    [NonReflectionValue]
     private Transform _transform;
+    [NonReflectionValue]
     private NavMeshAgent _agent;
-    private float _distanceToKeep;
+    [NonReflectionValue]
     private float _timer = 0f;
+    [NonReflectionValue]
     private float _maxTimeForDirection;
+
+    private float _distanceToKeep;
     private float _timeRangeMin, _timeRangeMax;
     private Quaternion _angle;
-
 
 
     public TaskSurroundTarget(Blackboard blackboard) : base(blackboard)

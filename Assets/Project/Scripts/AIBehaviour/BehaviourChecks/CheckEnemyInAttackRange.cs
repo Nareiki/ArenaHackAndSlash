@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CheckEnemyInAttackRange : BasicNode
 {
+    [NonReflectionValue]
     private Transform _transform;
     private float _attackRange = 1.5f;
 

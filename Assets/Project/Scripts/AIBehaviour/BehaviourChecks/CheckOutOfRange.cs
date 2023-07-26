@@ -5,19 +5,23 @@ using UnityEngine;
 
 public class CheckOutOfRange : BasicNode
 {
+    [NonReflectionValue]
     private Transform _transform;
-    private float _outOfRangeTime;
+    [NonReflectionValue]
     private float _outOfRangeCounter;
-    private float _rangeDistance;
+    [NonReflectionValue]
     private float _outOfRangeDistance;
+
+    private float _outOfRangeTime;
+    private float _fovRange;
 
 
     public CheckOutOfRange(Blackboard blackboard) : base(blackboard)
     {
         _transform = blackboard.GetData<Transform>("transform");
         _outOfRangeTime = blackboard.GetData<float>("outOfRangeTime");
-        _rangeDistance = blackboard.GetData<float>("fovRange");
-        _outOfRangeDistance = _rangeDistance + blackboard.GetData<float>("rangeBuffer");
+        _fovRange = blackboard.GetData<float>("fovRange");
+        _outOfRangeDistance = _fovRange + blackboard.GetData<float>("fovRangeBuffer");
     }
 
     public override NodeState Evaluate()

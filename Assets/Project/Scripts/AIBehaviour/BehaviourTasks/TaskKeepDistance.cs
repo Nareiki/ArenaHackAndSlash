@@ -5,18 +5,23 @@ using UnityEngine.AI;
 
 public class TaskKeepDistance : BasicNode
 {
-    private NavMeshAgent _agent;
+    [NonReflectionValue]
     private Transform _transform;
-    private float _distanceToKeep;
+    [NonReflectionValue]
+    private NavMeshAgent _agent;
+    [NonReflectionValue]
     private float _distanceWithBuffer;
+    [NonReflectionValue]
     private float _radiusToMove = 0f;
+
+    private float _distanceToKeep;
 
     public TaskKeepDistance(Blackboard blackboard) : base(blackboard)
     {
         _agent = blackboard.GetData<NavMeshAgent>("agent");
         _transform = blackboard.GetData<Transform>("transform");
         _distanceToKeep = blackboard.GetData<float>("distanceToKeep");
-        _distanceWithBuffer = _distanceToKeep + blackboard.GetData<float>("rangeBuffer");
+        _distanceWithBuffer = _distanceToKeep + blackboard.GetData<float>("fovRangeBuffer");
     }
 
     public override NodeState Evaluate()

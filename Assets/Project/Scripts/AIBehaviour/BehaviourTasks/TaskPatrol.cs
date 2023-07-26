@@ -5,17 +5,18 @@ using UnityEngine.AI;
 
 public class TaskPatrol : BasicNode
 {
-
+    [NonReflectionValue]
     private Transform _transform;
-
-    private Transform[] _waypoints;
-
+    [NonReflectionValue]
     private NavMeshAgent _agent;
-
+    [NonReflectionValue]
     private int _currentWaypointIndex = 0;
-
-    private float _waitTime = 1f;
+    private Transform[] _waypoints;
+    // Time to wait when reaching waypoints
+    private float _waitTimePerPoint = 1f;
+    [NonReflectionValue]
     private float _waitCounter = 0f;
+    [NonReflectionValue]
     private bool _waiting = false;
 
     public TaskPatrol(Blackboard blackboard) : base(blackboard)
@@ -23,7 +24,7 @@ public class TaskPatrol : BasicNode
         _transform = blackboard.GetData<Transform>("transform");
         _waypoints = blackboard.GetData<Transform[]>("waypoints");
         _agent = blackboard.GetData<NavMeshAgent>("agent");
-        _waitTime = blackboard.GetData<float>("waitTimePerPoint");
+        _waitTimePerPoint = blackboard.GetData<float>("waitTimePerPoint");
     }
 
     public override NodeState Evaluate()
@@ -31,7 +32,7 @@ public class TaskPatrol : BasicNode
         if (_waiting)
         {
             _waitCounter += Time.deltaTime;
-            if (_waitCounter >= _waitTime)
+            if (_waitCounter >= _waitTimePerPoint)
             {
                 _waiting = false;
             }

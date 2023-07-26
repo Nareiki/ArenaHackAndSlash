@@ -16,15 +16,7 @@ public class EnemyBT : BasicTree, IProduct
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _enemyBlackboard = new Blackboard(_testData.GetAttributes(_agent));
-
-        //Initialized Shared Data
-        _enemyBlackboard.SetData("transform", transform);
-
-        _enemyBlackboard.SetData("target", null);
-        _enemyBlackboard.SetData("canAttack", false);
-        _enemyBlackboard.SetData("onCooldown", false);
-        _enemyBlackboard.SetData("outOfRange", false);
+        _enemyBlackboard = new Blackboard(_testData.GetAttributes(_agent, transform));
 
         BasicNode root = new Selector(new List<BasicNode>
         {
@@ -56,11 +48,5 @@ public class EnemyBT : BasicTree, IProduct
     public void Initialize(Transform[] waypoints)
     {
         Initialize();
-        //_waypoints = waypoints;
-    }
-
-    public BasicNode TestTree()
-    {
-        return SetupTree();
     }
 }

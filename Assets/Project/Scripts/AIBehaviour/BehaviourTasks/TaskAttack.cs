@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class TaskAttack : BasicNode
 {
+    [NonReflectionValue]
     private Transform _lastTarget;
+    [NonReflectionValue]
     private IDamageable _enemyManager;
 
     public TaskAttack(Blackboard blackboard) : base(blackboard) { }
@@ -14,7 +16,7 @@ public class TaskAttack : BasicNode
         Transform target = blackboard.GetData<Transform>("target");// (Transform)GetData("target");
         if (target != _lastTarget)
         {
-            _enemyManager = target.GetComponent<BasicEnemy>();
+            _enemyManager = target.GetComponent<IDamageable>();
             _lastTarget = target;
         }
         else if (target == null)
