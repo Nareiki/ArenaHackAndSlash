@@ -4,6 +4,7 @@ public class CheckEnemyInFOVRange : BasicNode
 {
     [NonReflectionValue]
     private Transform _transform;
+
     private LayerMask _enemyLayerMask;
     private float _fovRange;
 

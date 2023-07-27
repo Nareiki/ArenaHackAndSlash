@@ -15,7 +15,7 @@ public class TaskSurroundTarget : BasicNode
     private float _maxTimeForDirection;
 
     private float _distanceToKeep;
-    private float _timeRangeMin, _timeRangeMax;
+    private float _minRange, _maxRange;
     private Quaternion _angle;
 
 
@@ -24,9 +24,9 @@ public class TaskSurroundTarget : BasicNode
         _transform = blackboard.GetData<Transform>("transform");
         _agent = blackboard.GetData<NavMeshAgent>("agent");
         _distanceToKeep = blackboard.GetData<float>("distanceToKeep");
-        _timeRangeMin = blackboard.GetData<float>("minRange");
-        _timeRangeMax = blackboard.GetData<float>("maxRange");
-        _maxTimeForDirection = Random.Range(_timeRangeMin, _timeRangeMax);
+        _minRange = blackboard.GetData<float>("minRange");
+        _maxRange = blackboard.GetData<float>("maxRange");
+        _maxTimeForDirection = Random.Range(_minRange, _maxRange);
         _angle = Quaternion.Euler(0f, blackboard.GetData<float>("angle"), 0f);
     }
 
@@ -36,7 +36,7 @@ public class TaskSurroundTarget : BasicNode
         if (_timer > _maxTimeForDirection)
         {
             _timer = 0f;
-            _maxTimeForDirection = Random.Range(_timeRangeMin, _timeRangeMax);
+            _maxTimeForDirection = Random.Range(_minRange, _maxRange);
             _angle = Quaternion.Inverse(_angle);
         }
 

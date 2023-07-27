@@ -204,23 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1b5e04d110043538efb04bc0dec472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 163840
-  _waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  _minRange: 1
-  _maxRange: 5
-  _angle: 20
-  _attackRange: 1.5
-  _targetReachedRange: 1.5
-  _fovRange: 6
-  _rangeBuffer: 6
-  _distanceToKeep: 6
-  _waitTimePerPoint: 1.5
-  _outOfRangeTime: 2
-  _testData: {fileID: 11400000, guid: f41477f5e8def40459427e9cb3b42eed, type: 2}
+  _testData: {fileID: 11400000, guid: d365454e2578a4e9eaf1af42202b9a93, type: 2}
 --- !u!114 &-220149759777911056
 MonoBehaviour:
   m_ObjectHideFlags: 0

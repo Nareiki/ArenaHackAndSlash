@@ -9,23 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b48bb62fc35c04819aa6ab28ed69d09e, type: 3}
-  m_Name: DataHolder
+  m_Script: {fileID: 11500000, guid: 09090a471d309405d93bc749c75af912, type: 3}
+  m_Name: New MyData
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
+  attackRange: 1.5
+  outOfRangeTime: 2
+  fovRange: 6
+  attackSpeed: 1
+  cooldownTime: 5
+  targetReachedRange: 1.5
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 163840
+  fovRangeBuffer: 6
+  distanceToKeep: 6
+  minRange: 0
+  maxRange: 5
+  angle: 20
   waypoints:
   - {fileID: 488862169169838992, guid: 748298639174445689adbd1b460a1ea4, type: 3}
   - {fileID: 1206473361481291705, guid: b8bba4830c05e4b46aca90d3ae24a602, type: 3}
-  minRange: 1
-  maxRange: 5
-  angle: 20
-  attackRange: 1.5
-  targetReachedRange: 1.5
-  fovRange: 6
-  rangeBuffer: 6
-  distanceToKeep: 6
   waitTimePerPoint: 1.5
-  outOfRangeTime: 2

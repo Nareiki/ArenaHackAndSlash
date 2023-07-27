@@ -10,9 +10,8 @@ using UnityEngine;
 public class DataGenerationEditor : EditorWindow
 {
     private BasicTree _root;
-    private ScriptableObject _nodeDataContainer;
 
-    private Dictionary<string, object> dataFromNodes;
+    private Dictionary<string, TypeAndValuePair> dataFromNodes;
 
     [MenuItem("Window/NodeDataExtractor")]
     public static void ShowWindow()
@@ -22,20 +21,21 @@ public class DataGenerationEditor : EditorWindow
 
     private void OnGUI()
     {
-        dataFromNodes = new Dictionary<string, object>();
+        dataFromNodes = new Dictionary<string, TypeAndValuePair>();
 
 
         EditorGUILayout.LabelField("Node date Extractor", EditorStyles.boldLabel);
 
         _root = (BasicTree)EditorGUILayout.ObjectField("Root Node", _root, typeof(BasicTree), true);
-        _nodeDataContainer = (ScriptableObject)EditorGUILayout.ObjectField("Node Data Container", _nodeDataContainer, typeof(ScriptableObject), false);
 
         if (GUILayout.Button("Extract Data"))
         {
-            if (_root != null && _nodeDataContainer != null)
+            if (_root != null)
             {
-                ExtractNodeData(_root, _nodeDataContainer);
-                CreateScriptableObjectInstance(dataFromNodes);
+                ExtractNodeData(_root);
+                //CreateScriptableObjectInstance(dataFromNodes);
+                ScriptGenerator generator = new ScriptGenerator();
+                generator.CreateNewScript(dataFromNodes);
                 Debug.Log(dataFromNodes);
                 Debug.Log("Node data extracted and saved into the ScriptableObject");
             }
@@ -46,24 +46,7 @@ public class DataGenerationEditor : EditorWindow
         }
     }
 
-    private void CreateScriptableObjectInstance(Dictionary<string, object> data)
-    {
-        // Create a new instance of MyScriptableObject
-        ScriptableObjectBase newObject = ScriptableObject.CreateInstance<ScriptableObjectBase>();
-
-        // Optionally, initialize fields in the new object
-        // newObject.myString = "Hello";
-        // newObject.myInt = 42;
-        // newObject.myVector = Vector3.up;
-
-        // Save the instance as an asset file (optional, but can be useful)
-        string path = "Assets/NewMyScriptableObject.asset";
-        AssetDatabase.CreateAsset(newObject, path);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-    }
-
-    private void ExtractNodeData(BasicTree root, ScriptableObject container)
+    private void ExtractNodeData(BasicTree root)
     {
         // Here, you can extract the data from the 'node' and save it into the 'container'
         // For example, you can create public fields in the ScriptableObject to store the extracted data
@@ -128,9 +111,21 @@ public class DataGenerationEditor : EditorWindow
             {
                 if (field.GetCustomAttribute<NonReflectionValue>() == null)
                 {
-                    dataFromNodes.Add(keyToAdd, field.GetValue(extractionClass));
+                    dataFromNodes.Add(keyToAdd, new TypeAndValuePair(field.FieldType, field.GetValue(extractionClass)));
                 }
             }
         }
+    }
+}
+
+public class TypeAndValuePair
+{
+    public Type type { get; set; }
+    public object value { get; set; }
+
+    public TypeAndValuePair(Type type, object value)
+    {
+        this.type = type;
+        this.value = value;
     }
 }
