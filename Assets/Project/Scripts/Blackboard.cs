@@ -21,6 +21,7 @@ public class Blackboard
         T val = default;
 
         if (_dataContext.ContainsKey(key))
+
             return (T)_dataContext[key];
         else
         {

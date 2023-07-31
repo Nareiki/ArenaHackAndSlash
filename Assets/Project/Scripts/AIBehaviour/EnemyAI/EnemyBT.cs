@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyBT : BasicTree, IProduct
 {
-    [SerializeField] private DataBehaviourBase _testData;
+    [SerializeField] private DataBehaviourBase _enemyData;
     private Blackboard _enemyBlackboard;
     private NavMeshAgent _agent;
 
@@ -16,7 +16,7 @@ public class EnemyBT : BasicTree, IProduct
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _enemyBlackboard = new Blackboard(_testData.GetAttributes(_agent, transform));
+        _enemyBlackboard = new Blackboard(_enemyData.GetAttributes(_agent, transform));
 
         BasicNode root = new Selector(new List<BasicNode>
         {

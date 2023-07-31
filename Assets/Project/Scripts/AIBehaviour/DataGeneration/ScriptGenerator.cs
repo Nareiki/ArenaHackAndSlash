@@ -1,29 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
 using UnityEditor;
 using System.Text;
-using System;
+using System.IO;
 
 public class ScriptGenerator
 {
-    public void CreateNewScript(Dictionary<string, TypeAndValuePair> dict)
+    public void CreateNewScript(Dictionary<string, TypeAndValuePair> dict, string folderStructure, string nameOfFile)
     {
-        string scriptContent = @"using System;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
-using UnityEngine.AI;
+        nameOfFile = nameOfFile.Replace(" ", "");//.Remove(nameOfFile.IndexOf(" "));
 
-[CreateAssetMenu(fileName = ""New MyData"", menuName = ""BehaviourTreeData/MyData"", order = 1)]
-public class MyData : DataBehaviourBase
-{ " +
-    GenerateDataFromDictionary(dict) +
-    @"
-}";
+        string scriptContent = @"using UnityEngine;
+
+[CreateAssetMenu(fileName = ""New " + nameOfFile + @""", menuName = ""BehaviourTreeData/" + nameOfFile + @""", order = 1)]
+public class " + nameOfFile + @" : DataBehaviourBase
+{
+" + GenerateDataFromDictionary(dict) +
+@"}";
         // Setzen Sie hier den Pfad, wo Sie das Skript speichern möchten.
-        string scriptPath = "Assets/MyData.cs";
+        string scriptPath = "Assets/" + folderStructure + "/" + nameOfFile + ".cs";
 
         File.WriteAllText(scriptPath, scriptContent);
 
@@ -36,12 +30,34 @@ public class MyData : DataBehaviourBase
 
         foreach (var item in dict)
         {
-            buildString.Append("public ");
-            buildString.Append(item.Value.type);
+            string valueType = item.Value.type.FullName;
+
+            buildString.Append("\tpublic ");
+
+            if (valueType.Contains("Single"))
+            {
+                buildString.Append("float");
+            }
+            else if (valueType.Contains("UnityEngine"))
+            {
+                buildString.Append(valueType.Substring(valueType.IndexOf('.') + 1));
+            }
+            //buildString.Append(valueType);
             buildString.Append(" ");
             buildString.Append(item.Key);
-            buildString.Append(" = ");
-            buildString.Append(item.Value.value);
+
+            string namespaceStr = item.Value.type.Namespace;
+
+            if (namespaceStr.Contains("System"))
+            {
+                buildString.Append(" = ");
+
+                buildString.Append(item.Value.value);
+                if (valueType.Contains("Single"))
+                {
+                    buildString.Append("f");
+                }
+            }
             buildString.AppendLine(";");
         }
 

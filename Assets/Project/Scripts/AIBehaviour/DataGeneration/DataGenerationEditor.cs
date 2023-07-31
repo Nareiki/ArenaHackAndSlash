@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DataGenerationEditor : EditorWindow
 {
     private BasicTree _root;
+    private string nameOfFile = "";
+    string _scriptFolder;
 
     private Dictionary<string, TypeAndValuePair> dataFromNodes;
 
@@ -24,18 +28,23 @@ public class DataGenerationEditor : EditorWindow
         dataFromNodes = new Dictionary<string, TypeAndValuePair>();
 
 
+
         EditorGUILayout.LabelField("Node date Extractor", EditorStyles.boldLabel);
 
+
         _root = (BasicTree)EditorGUILayout.ObjectField("Root Node", _root, typeof(BasicTree), true);
+
+        nameOfFile = EditorGUILayout.TextField("Object Name: ", nameOfFile);
 
         if (GUILayout.Button("Extract Data"))
         {
             if (_root != null)
             {
+                ReadSetupData();
                 ExtractNodeData(_root);
                 //CreateScriptableObjectInstance(dataFromNodes);
                 ScriptGenerator generator = new ScriptGenerator();
-                generator.CreateNewScript(dataFromNodes);
+                generator.CreateNewScript(dataFromNodes, _scriptFolder, nameOfFile);
                 Debug.Log(dataFromNodes);
                 Debug.Log("Node data extracted and saved into the ScriptableObject");
             }
@@ -46,14 +55,26 @@ public class DataGenerationEditor : EditorWindow
         }
     }
 
+    void ReadSetupData()
+    {
+        MonoScript ms = MonoScript.FromScriptableObject(this);
+        string scriptFilePath = AssetDatabase.GetAssetPath(ms);
+
+        FileInfo fi = new FileInfo(scriptFilePath);
+
+        _scriptFolder = fi.Directory.ToString();
+        _scriptFolder = _scriptFolder.Replace(Application.dataPath, "");
+
+
+        Debug.Log(_scriptFolder);
+    }
+
     private void ExtractNodeData(BasicTree root)
     {
-        // Here, you can extract the data from the 'node' and save it into the 'container'
-        // For example, you can create public fields in the ScriptableObject to store the extracted data
 
-        // Example: Let's assume your ScriptableObject has fields like 'nodeNames', 'nodeValues', 'nodePositions'.
-        // You can modify this based on the actual data you want to extract.
         Type type = root.GetType();
+
+        SetDataBehaviourField(type, root);
 
         MethodInfo info = type.GetMethod("SetupTree", BindingFlags.NonPublic | BindingFlags.Instance);
         BasicNode tree = new BasicNode();
@@ -61,7 +82,6 @@ public class DataGenerationEditor : EditorWindow
         {
             tree = (BasicNode)info.Invoke(root, null);
         }
-        Debug.Log(tree);
 
         // Get Children of Child
 
@@ -69,6 +89,28 @@ public class DataGenerationEditor : EditorWindow
 
         GetAllNodesFromParentNode(tree, nonPubFields, "Children");
 
+    }
+
+    private void SetDataBehaviourField(Type type, BasicTree root)
+    {
+        FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+        foreach (FieldInfo field in fields)
+        {
+
+            Type typetemp = field?.FieldType;
+            if (typetemp != null && typetemp == typeof(DataBehaviourBase))
+            {
+                var test = field?.GetValue(root);
+                if (test == null)
+                {
+                    field.SetValue(root, (DataBehaviourBase)CreateInstance("DataBehaviourBase"));
+                }
+                return;
+            }
+        }
+
+        //FieldInfo temp = type.GetField("_guardData", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
     private void GetAllNodesFromParentNode<T>(T node, BindingFlags flags, string field)
