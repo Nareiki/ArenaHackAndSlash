@@ -1,0 +1,32 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CS_Wave
+
+#define PI 3.14159265358979323846
+
+RWStructuredBuffer<float3> _Positions;
+
+uint _Resolution;
+float _Step;
+float _Time;
+
+float3 Wave(float _u, float _v, float _t)
+{
+    float3 position;
+    position.x = _u;
+    position.y = sin(PI * (_u + _v + _t));
+    position.z = _v;
+    return position;
+}
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+
+[numthreads(8,8,1)]
+void CS_Wave (uint3 id : SV_DispatchThreadID)
+{
+    
+    float uv = (id.xy + 0.5) * _Step - 1.0;
+    if (id.x < _Resolution && id.y < _Resolution)
+        _Positions[id.x + id.y * _Resolution] = Wave(uv.x, uv.r, _Time);
+}
