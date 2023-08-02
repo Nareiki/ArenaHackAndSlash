@@ -6,40 +6,28 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class GuardBT : BasicTree
 {
-
+    [SerializeField] private DataBehaviourBase _guardData;
+    private Blackboard _guardBlackboard;
     private NavMeshAgent _agent;
-    [SerializeField] private Transform[] _waypoints;
-
-    public static float Speed = 2f;
-
-    public static float FovRange = 6f;
-
-    public static float AttackRange = 2f;
-
-    private LayerMask _enemyLayerMask = 1 << 16;
 
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _guardBlackboard = new Blackboard(_guardData.GetAttributes(_agent, transform));
+
         BasicNode root = new Selector(new List<BasicNode>
         {
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInAttackRange(transform),
-                new TaskAttack(),
+                new CheckEnemyInAttackRange(_guardBlackboard),
+                new TaskAttack(_guardBlackboard),
             }),
             new Sequence(new List<BasicNode>{
-                new CheckEnemyInFOVRange(transform, _enemyLayerMask),
-                new TaskGoToTarget(transform, _agent),
+                new CheckEnemyInFOVRange(_guardBlackboard),
+                new TaskGoToTarget(_guardBlackboard),
 
             }),
-            new TaskPatrol(transform, _waypoints, _agent),
+            new TaskPatrol(_guardBlackboard),
         });
-        //BasicNode root = new TaskPatrol(transform, Waypoints, _agent);
         return root;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position, GuardBT.FovRange);
     }
 }

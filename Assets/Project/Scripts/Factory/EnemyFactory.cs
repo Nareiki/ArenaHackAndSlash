@@ -45,11 +45,9 @@ public class EnemyFactory : ScriptableObject
         }
 
         EnemyBT pooledEnemyScript = pooledEnemy.GetComponent<EnemyBT>();
-        pooledEnemyScript.Initialize();
-        pooledEnemyScript._waypoints = _waypointArray;
+        pooledEnemyScript.Initialize(_waypointArray);
 
         #endregion
-
 
         return pooledEnemyScript;
     }
