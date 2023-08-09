@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b64cbb2c6df94ddf8d180a462f90243, type: 3}
+  m_Name: GuardData
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  attackRange: 2
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 65536
+  fovRange: 6
+  fovRangeBuffer: 2
+  targetReachedRange: 2
+  waypoints:
+  - {fileID: 488862169169838992, guid: 748298639174445689adbd1b460a1ea4, type: 3}
+  - {fileID: 1206473361481291705, guid: b8bba4830c05e4b46aca90d3ae24a602, type: 3}
+  waitTimePerPoint: 1.5

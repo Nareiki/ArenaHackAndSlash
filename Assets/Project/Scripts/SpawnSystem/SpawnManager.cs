@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private Transform[] _spawnPoints;
-    [SerializeField] private GameObject _enemy;
     [SerializeField] private int _minEnemyLoaded;
 
     [SerializeField] private EnemyFactory _enemyFactory;

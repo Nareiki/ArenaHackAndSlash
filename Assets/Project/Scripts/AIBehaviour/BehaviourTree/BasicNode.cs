@@ -10,15 +10,18 @@ public enum NodeState
     FAILURE
 }
 
-public class BasicNode
+[System.Serializable]
+public class BasicNode : INode
 {
     [NonReflectionValue]
     protected NodeState State;
 
+    [SerializeField]
     public BasicNode Parent;
+    [SerializeField]
     [NonReflectionValue]
     protected List<BasicNode> Children = new List<BasicNode>();
-
+    [SerializeField]
     public virtual NodeState Evaluate() => NodeState.FAILURE;
     [NonReflectionValue]
     protected Blackboard blackboard;

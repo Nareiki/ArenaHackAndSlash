@@ -1,0 +1,26 @@
+License: CC0 (public domain)
+These Swords/Daggers are based on 2D Sprites by Pavel Kutenjnikov
+
+All my modifications, models and textures are Licensed as CC0 just as the originals.
+You may credit me as either Shadowfeign, or 7thSage. But I would appreciate it that if you credit anyone, please be sure to credit the original artist: Pavel Kutejnikov
+
+Daggers
+by Pavel Kutejnikov
+License: CC0 (public domain)
+https://opengameart.org/content/daggers
+
+
+Obsidian Sword/Dagger also includes elements from
+
+Hammers
+by Pavel Kutejnikov
+License: CC0 (public domain)
+https://opengameart.org/content/hammers
+
+
+Also included is a texture for the obsidian dagger compatible with a previous 3d adaptation by Drummyfish
+
+kutejnikovs weapons 3d
+by Drummyfish based on art by Pavel Kutejnikov
+License: CC0 (public domain)
+https://opengameart.org/content/kutejnikovs-weapons-3d

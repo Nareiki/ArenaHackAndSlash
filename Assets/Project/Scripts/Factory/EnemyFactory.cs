@@ -6,14 +6,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class EnemyFactory : ScriptableObject
 {
-
-    //private Dictionary<string, Type> _enemys;
-
     [SerializeField] private GameObject _basicEnemy;
-
-    public GameObject ObjectToSpawn { get => _basicEnemy; }
-
-    [SerializeField] private Transform[] _waypointArray;
 
     public IProduct SpawnObject(Vector3 position)
     {
@@ -45,7 +38,7 @@ public class EnemyFactory : ScriptableObject
         }
 
         EnemyBT pooledEnemyScript = pooledEnemy.GetComponent<EnemyBT>();
-        pooledEnemyScript.Initialize(_waypointArray);
+        //pooledEnemyScript.Initialize(_waypointArray);
 
         #endregion
 
