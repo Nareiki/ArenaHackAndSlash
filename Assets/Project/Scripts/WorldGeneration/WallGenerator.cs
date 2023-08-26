@@ -5,12 +5,12 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class WallGenerator : MonoBehaviour
 {
-    public GameObject wallPrefab;
-    public int wallHeight = 5; // Set the height of the walls.
-    public float wallThickness = 0.2f; // Set the thickness of the walls.
-    private int numberOfWalls = 16; // Set the number of walls.
+    [SerializeField] private GameObject _wallPrefab;
+    [SerializeField] private int _wallHeight = 5; // Set the height of the walls.
+    [SerializeField] private float _wallThickness = 0.2f; // Set the thickness of the walls.
+    private int _numberOfWalls = 16; // Set the number of walls.
 
-    private GameObject[] generatedWalls;
+    private GameObject[] _generatedWalls;
 
     private int _resolution;  // The actual resolution property.
 
@@ -56,6 +56,7 @@ public class WallGenerator : MonoBehaviour
 
     private void Start()
     {
+        RemoveWalls();
         GenerateWalls();
     }
 
@@ -70,10 +71,10 @@ public class WallGenerator : MonoBehaviour
     private void RemoveWalls()
     {
         // Check if there are any generated walls.
-        if (generatedWalls != null)
+        if (_generatedWalls != null)
         {
             // Destroy each generated wall.
-            foreach (var wall in generatedWalls)
+            foreach (var wall in _generatedWalls)
             {
 
                 StartCoroutine(Destroy(wall));
@@ -81,7 +82,7 @@ public class WallGenerator : MonoBehaviour
             }
 
             // Clear the array.
-            generatedWalls = null;
+            _generatedWalls = null;
         }
     }
 
@@ -95,16 +96,16 @@ public class WallGenerator : MonoBehaviour
     {
         //ProceduralSphere sphere = GetComponentInChildren<ProceduralSphere>();
         //Resolution = sphere.Resolution;
-        numberOfWalls = Resolution;
+        _numberOfWalls = Resolution;
         //_radius = sphere.Radius;
 
         Vector3 platformCenter = transform.position;
-        float angleIncrement = 360f / numberOfWalls;
+        float angleIncrement = 360f / _numberOfWalls;
 
         // Create an array to store the generated walls.
-        generatedWalls = new GameObject[numberOfWalls];
+        _generatedWalls = new GameObject[_numberOfWalls];
 
-        for (int i = 0; i < numberOfWalls; i++)
+        for (int i = 0; i < _numberOfWalls; i++)
         {
             float angle = i * angleIncrement * Mathf.Deg2Rad;
             float nextAngle = (i + 1) * angleIncrement * Mathf.Deg2Rad;
@@ -112,23 +113,23 @@ public class WallGenerator : MonoBehaviour
             // Calculate the midpoint between two adjacent vertices.
             float midAngle = (angle + nextAngle) / 2.0f;
 
-            Vector3 vertex1 = new Vector3(Mathf.Cos(angle) * (_radius + wallThickness), 0, Mathf.Sin(angle) * (_radius + wallThickness)) + platformCenter;
-            Vector3 vertex2 = new Vector3(Mathf.Cos(nextAngle) * (_radius + wallThickness), 0, Mathf.Sin(nextAngle) * (_radius + wallThickness)) + platformCenter;
+            Vector3 vertex1 = new Vector3(Mathf.Cos(angle) * (_radius + _wallThickness), 0, Mathf.Sin(angle) * (_radius + _wallThickness)) + platformCenter;
+            Vector3 vertex2 = new Vector3(Mathf.Cos(nextAngle) * (_radius + _wallThickness), 0, Mathf.Sin(nextAngle) * (_radius + _wallThickness)) + platformCenter;
 
             // Calculate the midpoint between the two adjacent vertices.
             Vector3 wallPosition = Vector3.Lerp(vertex1, vertex2, 0.5f);
 
             Quaternion wallRotation = Quaternion.Euler(0, -midAngle * Mathf.Rad2Deg, 0);
 
-            GameObject wall = Instantiate(wallPrefab, wallPosition, wallRotation);
+            GameObject wall = Instantiate(_wallPrefab, wallPosition, wallRotation);
             BoxCollider collider = wall.AddComponent<BoxCollider>();
-            wall.transform.localScale = new Vector3(wallThickness,
-                wallHeight, Vector3.Distance(vertex1, vertex2)
+            wall.transform.localScale = new Vector3(_wallThickness,
+                _wallHeight, Vector3.Distance(vertex1, vertex2)
                 );
             wall.transform.SetParent(transform);
             wall.tag = "Wall";
 
-            generatedWalls[i] = wall;
+            _generatedWalls[i] = wall;
         }
     }
 }

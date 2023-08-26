@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
+[RequireComponent(typeof(NavMeshSurface))]
 public class GroundGenerator : MonoBehaviour
 {
     [SerializeField] public float Radius = 10.0f;
     [SerializeField] public int Resolution = 16;
+
+    private NavMeshSurface _navSurvace;
 
     private Mesh _mesh;
 
@@ -17,14 +21,20 @@ public class GroundGenerator : MonoBehaviour
 
     private void Start()
     {
+        _navSurvace = GetComponent<NavMeshSurface>();
         CreateCircularArena();
         UpdateMesh();
     }
 
     private void OnValidate()
     {
+        _navSurvace = GetComponent<NavMeshSurface>();
         CreateCircularArena();
         UpdateMesh();
+#if (UNITY_EDITOR)
+        _navSurvace.BuildNavMesh();
+#endif
+
     }
 
     private void MeshInitializaion()
