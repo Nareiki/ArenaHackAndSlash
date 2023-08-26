@@ -120,20 +120,6 @@ public class ArenaGenerator : MonoBehaviour
                 }
             }
         }
-
-        //CreateWalls();
-        //RenderWall();
-
-        //if (AnyChanges())
-        //{
-        //    CreateWalls();
-        //    CreatePillars();
-        //    CreateFloor();
-        //}
-
-        //RenderWalls();
-        //RenderPillars();
-        //RenderFloor();
     }
 
     private void SpawnObject()
