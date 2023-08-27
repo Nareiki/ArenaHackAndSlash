@@ -9,8 +9,8 @@ using static UnityEditor.Progress;
 [ExecuteInEditMode]
 public class ObjectSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject objectPrefab; // The prefab of the object you want to spawn.
-    [SerializeField] private int numberOfObjects = 10; // Number of objects to spawn.
+    [SerializeField] private GameObject _objectPrefab; // The prefab of the object you want to spawn.
+    [SerializeField] private int _numberOfObjects = 10; // Number of objects to spawn.
     [SerializeField] private float _minDistanceFromEdge = 2.0f;
     [SerializeField] private float _checkRadius = 1.0f;
     [SerializeField] private float _maxTries = 10;
@@ -62,7 +62,6 @@ public class ObjectSpawner : MonoBehaviour
             {
 
                 StartCoroutine(Destroy(wall));
-
             }
 
             // Clear the array.
@@ -79,28 +78,29 @@ public class ObjectSpawner : MonoBehaviour
 
     private void SpawnObjects()
     {
-        _gameObjects = new GameObject[numberOfObjects];
+        _gameObjects = new GameObject[_numberOfObjects];
         float innerRadius = ArenaRadius - _minDistanceFromEdge;
 
-        NativeArray<Vector3> positions = new NativeArray<Vector3>(numberOfObjects, Allocator.Persistent);
-        
+        NativeArray<Vector3> positions = new NativeArray<Vector3>(_numberOfObjects, Allocator.Persistent);
+
+        var random = new Unity.Mathematics.Random((uint)UnityEngine.Random.Range(1, 100000));
 
         GeneratePositionsJob job = new GeneratePositionsJob
         {
-            RandomNumberGenerators = _randomNumberGenerators,
+            Random = random,
             Positions = positions,
-            NumberOfObjects = numberOfObjects,
+            NumberOfObjects = _numberOfObjects,
             InnerRadius = innerRadius,
             CheckRadius = _checkRadius,
             MaxTries = _maxTries,
             ArenaPosition = transform.position,
         };
 
-        JobHandle jobHandle = job.Schedule(numberOfObjects, 64);
+        JobHandle jobHandle = job.Schedule(_numberOfObjects, 64);
 
         jobHandle.Complete();
 
-        for (int i = 0; i < numberOfObjects; i++)
+        for (int i = 0; i < _numberOfObjects; i++)
         {
             Vector3 spawnPosition = positions[i];
 
@@ -109,77 +109,17 @@ public class ObjectSpawner : MonoBehaviour
                 _spawnedObjectPositions.Add(spawnPosition);
                 _gameObjects[i] = SpawnObject(spawnPosition);
             }
-
-            //GameObject spawnedObject = TrySpawnObject(innerRadius);
-
-            //int tryCounter = 0;
-
-            //while (spawnedObject == null)
-            //{
-            //    spawnedObject = TrySpawnObject(innerRadius);
-            //    tryCounter++;
-            //}
-
-            //_gameObjects[i] = spawnedObject;
             
         }
         positions.Dispose();
     }
 
-    private GameObject TrySpawnObject(float innerRadius)
-    {
-        Vector3 randomPosition = GetRandomPositionWithinArena(innerRadius);
-
-        for (int i = 0;i<_maxTries; i++)
-        {
-            if (CanSpawnAtPosition(randomPosition))
-            {
-                break;
-            }
-            randomPosition = GetRandomPositionWithinArena(innerRadius);
-        }
-
-        _spawnedObjectPositions.Add(randomPosition);
-
-        return SpawnObject(randomPosition);
-    }
-
     private GameObject SpawnObject(Vector3 spawnPosition)
     {
-        GameObject item = Instantiate(objectPrefab, spawnPosition, Quaternion.identity);
+        GameObject item = Instantiate(_objectPrefab, spawnPosition, Quaternion.identity);
         BoxCollider collider = item.AddComponent<BoxCollider>();
         collider.isTrigger = true;
 
         return item;
-    }
-
-    private bool CanSpawnAtPosition(Vector3 position)
-    {
-        // Check if the position is too close to any previously spawned objects.
-        foreach (Vector3 spawnedPosition in _spawnedObjectPositions)
-        {
-            if (Vector3.Distance(position, spawnedPosition) < _checkRadius)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private Vector3 GetRandomPositionWithinArena(float innerRadius)
-    {
-        // Calculate a random angle and distance within the spawn radius.
-        float randomAngle = Random.Range(0, 360);
-        float randomDistance = Random.Range(0, innerRadius);
-
-        // Calculate the random position based on polar coordinates.
-        float x = Mathf.Cos(randomAngle * Mathf.Deg2Rad) * randomDistance;
-        float z = Mathf.Sin(randomAngle * Mathf.Deg2Rad) * randomDistance;
-
-        // Add the position of the arena to the random position.
-        Vector3 randomPosition = new Vector3(x, 0, z) + transform.position;
-
-        return randomPosition;
     }
 }

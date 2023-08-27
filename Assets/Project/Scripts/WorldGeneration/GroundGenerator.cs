@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.AI.Navigation;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -14,6 +17,7 @@ public class GroundGenerator : MonoBehaviour
     private NavMeshSurface _navSurvace;
 
     private Mesh _mesh;
+    private MeshCollider _meshCollider;
 
     private int[] _triangles;
     private Vector3[] _verticies;
@@ -43,6 +47,7 @@ public class GroundGenerator : MonoBehaviour
         _mesh = meshFilter.mesh;
     }
 
+    #region SphereGeneration
     private void CreateSphere()
     {
         MeshInitializaion();
@@ -84,37 +89,64 @@ public class GroundGenerator : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region CircularArenaGeneration
     private void CreateCircularArena()
     {
         MeshInitializaion();
+
+        NativeArray<Vector3> vertices = new NativeArray<Vector3>(Resolution, Allocator.TempJob);
+        NativeArray<Vector2> uv = new NativeArray<Vector2>(Resolution, Allocator.TempJob);
+        NativeArray<int> triangles = new NativeArray<int> ((Resolution - 2) * 3, Allocator.TempJob);
 
         _verticies = new Vector3[Resolution];
         _uv = new Vector2[Resolution];
         _triangles = new int[(Resolution - 2) * 3]; // Number of triangles needed for a convex polygon.
 
-        float angleIncrement = 360.0f / Resolution; // Angle increment between vertices.
-
-        // Create vertices in a circular pattern.
-        for (int i = 0; i < Resolution; i++)
+        var job = new CalculateCircularArenaJob
         {
-            float angle = i * angleIncrement * Mathf.Deg2Rad;
-            float x = Mathf.Cos(angle) * Radius;
-            float z = Mathf.Sin(angle) * Radius;
-            _verticies[i] = new Vector3(x, 0, z);
-            //_uv[i] = new Vector2((x / (Radius * 2)) + 0.5f, (z / (Radius * 2)) + 0.5f); // Centered UV mapping for texture.
-            //_uv[i] = new Vector2(x / Radius, z / Radius); // UV mapping for texture.
-            _uv[i] = new Vector2((float)i / Resolution, 0.5f);
-        }
+            Resolution = Resolution,
+            Radius = Radius,
+            Vertices = vertices,
+            UV = uv,
+            Triangles = triangles,
+        };
 
-        // Create triangles to form the circular shape.
-        for (int i = 0, triangleIndex = 0; i < Resolution - 2; i++)
-        {
-            _triangles[triangleIndex++] = 0;
-            _triangles[triangleIndex++] = i + 2;
-            _triangles[triangleIndex++] = i + 1;
-        }
+        JobHandle jobHandle = job.Schedule(Resolution, 64);
+        jobHandle.Complete();
+
+        _verticies = vertices.ToArray();
+        _uv = uv.ToArray();
+        _triangles = triangles.ToArray();
+
+        vertices.Dispose();
+        uv.Dispose();
+        triangles.Dispose();
+
+        //float angleIncrement = 360.0f / Resolution; // Angle increment between vertices.
+
+        //// Create vertices in a circular pattern.
+        //for (int i = 0; i < Resolution; i++)
+        //{
+        //    float angle = i * angleIncrement * Mathf.Deg2Rad;
+        //    float x = Mathf.Cos(angle) * Radius;
+        //    float z = Mathf.Sin(angle) * Radius;
+        //    _verticies[i] = new Vector3(x, 0, z);
+        //    //_uv[i] = new Vector2((x / (Radius * 2)) + 0.5f, (z / (Radius * 2)) + 0.5f); // Centered UV mapping for texture.
+        //    //_uv[i] = new Vector2(x / Radius, z / Radius); // UV mapping for texture.
+        //    _uv[i] = new Vector2((float)i / Resolution, 0.5f);
+        //}
+
+        //// Create triangles to form the circular shape.
+        //for (int i = 0, triangleIndex = 0; i < Resolution - 2; i++)
+        //{
+        //    _triangles[triangleIndex++] = 0;
+        //    _triangles[triangleIndex++] = i + 2;
+        //    _triangles[triangleIndex++] = i + 1;
+        //}
     }
+    #endregion
 
     private void UpdateMesh()
     {
@@ -124,11 +156,15 @@ public class GroundGenerator : MonoBehaviour
         _mesh.triangles = _triangles;
         _mesh.RecalculateNormals();
 
-        // Add or update the MeshCollider.
-        MeshCollider meshCollider = GetComponent<MeshCollider>();
-        if (meshCollider != null)
+
+        if (_meshCollider == null)
         {
-            meshCollider.sharedMesh = _mesh;
+            _meshCollider = GetComponent<MeshCollider>();
+        }
+        // Add or update the MeshCollider.
+        if (_meshCollider != null)
+        {
+            _meshCollider.sharedMesh = _mesh;
         }
     }
 }

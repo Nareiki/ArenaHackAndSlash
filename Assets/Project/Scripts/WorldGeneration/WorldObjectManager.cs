@@ -24,10 +24,8 @@ public class WorldObjectManager : MonoBehaviour
 
     private void Start()
     {
-        // Ensure that you have assigned the WallGenerator script reference in the Inspector.
         if (_wallGenerator != null)
         {
-            // Initialize the previousResolution with the initial value.
             _wallGenerator.Resolution = _proceduralSphere.Resolution;
             _wallGenerator.Radius = _proceduralSphere.Radius;
         }
@@ -41,10 +39,9 @@ public class WorldObjectManager : MonoBehaviour
             _spawner.ArenaRadius = _proceduralSphere.Radius;
         }
     }
-
+    // Connection between the Generation Scripts
     private void Update()
     {
-        // Check if the WallGenerator reference is not null.
         if (_wallGenerator != null && _proceduralSphere != null)
         {
             int resolution = _proceduralSphere.Resolution;
