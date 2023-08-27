@@ -8,6 +8,7 @@ using UnityEngine;
 [BurstCompile]
 public struct GeneratePositionsJob : IJobParallelFor
 {
+    public Unity.Mathematics.Random Random;
     public NativeArray<Vector3> Positions;
     public int NumberOfObjects;
     public float InnerRadius;
@@ -47,8 +48,8 @@ public struct GeneratePositionsJob : IJobParallelFor
     private Vector3 GetRandomPositionWithinArena(float innerRadius)
     {
         // Calculate a random angle and distance within the spawn radius.
-        float randomAngle = Random.Range(0, 360);
-        float randomDistance = Random.Range(0, innerRadius);
+        float randomAngle = Random.NextFloat(0, 360);
+        float randomDistance = Random.NextFloat(0, innerRadius);
 
         // Calculate the random position based on polar coordinates.
         float x = Mathf.Cos(randomAngle * Mathf.Deg2Rad) * randomDistance;
