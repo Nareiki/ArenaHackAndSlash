@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBT : BasicTree, IProduct, IWeatherAffectable, IFire
+public class EnemyBT : BasicTree, IProduct, IWeatherAffectable, IFire, IPoison
 {
     [SerializeField] private DataBehaviourBase _enemyData;
     private Blackboard _enemyBlackboard;
@@ -17,25 +17,26 @@ public class EnemyBT : BasicTree, IProduct, IWeatherAffectable, IFire
     public void AffectedByRain()
     {
         _enemyBlackboard.SetData("element", Elements.Water);
-        StartCoroutine(WetTimer());
+        StartCoroutine(ResetTimer(5));
     }
 
     public void Burn()
     {
         _enemyBlackboard.SetData("element", Elements.Fire);
 
-        StartCoroutine(BurnTimer());
+        StartCoroutine(ResetTimer(10));
     }
 
-    private IEnumerator BurnTimer()
+    public void Poisoned()
     {
-        yield return new WaitForSeconds(10);
-        _enemyBlackboard.SetData("element", Elements.None);
+        _enemyBlackboard.SetData("element", Elements.Toxic);
+
+        StartCoroutine(ResetTimer(20));
     }
 
-    private IEnumerator WetTimer()
+    private IEnumerator ResetTimer(int time)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(time);
         _enemyBlackboard.SetData("element", Elements.None);
     }
 
@@ -76,4 +77,5 @@ public class EnemyBT : BasicTree, IProduct, IWeatherAffectable, IFire
     {
         Initialize();
     }
+
 }

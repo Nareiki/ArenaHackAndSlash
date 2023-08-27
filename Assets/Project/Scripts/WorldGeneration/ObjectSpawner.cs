@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [ExecuteInEditMode]
 public class ObjectSpawner : MonoBehaviour
@@ -35,7 +34,8 @@ public class ObjectSpawner : MonoBehaviour
     public float ArenaRadius
     {
         get { return _arenaRadius; }
-        set {
+        set
+        {
             if (value != _arenaRadius)
             {
                 _arenaRadius = value;
@@ -104,12 +104,12 @@ public class ObjectSpawner : MonoBehaviour
         {
             Vector3 spawnPosition = positions[i];
 
-            if(spawnPosition != Vector3.zero)
+            if (spawnPosition != Vector3.zero)
             {
                 _spawnedObjectPositions.Add(spawnPosition);
                 _gameObjects[i] = SpawnObject(spawnPosition);
             }
-            
+
         }
         positions.Dispose();
     }

@@ -40,26 +40,26 @@ public class TaskElementControl : BasicNode
 
                 _maxTime = 1;
                 _agent.speed = _speed * 1.5f;
-                return State = DamageOverTime(5f); ; 
+                return State = DamageOverTime(5f); ;
             case Elements.Water:
 
                 _maxTime = 2.5f;
                 _agent.speed = _speed * 0.5f;
-                return State = DamageOverTime(10f); ;
+                return State = DamageOverTime(10f);
             case Elements.Toxic:
+                _maxTime = 4f;
                 _agent.speed = _speed * 0.5f;
-                break;
+                return State = DamageOverTime(20f);
             default:
                 return State = NodeState.FAILURE;
         }
 
-        return State = NodeState.FAILURE;
     }
 
     private NodeState DamageOverTime(float damage)
     {
 
-        if(_timeCounter > _maxTime)
+        if (_timeCounter > _maxTime)
         {
             bool? isDead = _thisBody.TakeHit(damage);
             if (isDead.HasValue && isDead.Value)
