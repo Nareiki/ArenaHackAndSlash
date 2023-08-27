@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,21 +19,41 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
     private string _productName = "BasicEnemy";
     public string ProductName { get => _productName; private set => _productName = value; }
 
-    public UnityEvent EnemyDied;
+    [SerializeField] private GameObject _textPrefab;
 
     private void Awake()
     {
         HealthPoints = 100;
     }
-
-    public bool TakeHit()
+    private void OnEnable()
     {
-        HealthPoints -= 25;
+        HealthPoints = 100;
+    }
+
+    public bool TakeHit(float damage)
+    {
+        HealthPoints -= damage;
+
+        ShowFloatingText("-" + damage.ToString());
+
         Debug.Log(HealthPoints);
         bool isDead = HealthPoints <= 0 ? true : false;
 
         if (isDead) Die();
         return isDead;
+    }
+
+    private void ShowFloatingText(string text)
+    {
+        // Instantiate the floating text prefab.
+        GameObject floatingText = Instantiate(_textPrefab, transform.position, Quaternion.identity);
+
+        // Set the text content.
+        FloatingText floatingTextScript = floatingText.GetComponent<FloatingText>();
+        if (floatingTextScript != null)
+        {
+            floatingTextScript.SetText(text);
+        }
     }
 
     private void Die()
@@ -45,5 +66,6 @@ public class BasicEnemy : MonoBehaviour, IProduct, IDamageable
     public void Initialize()
     {
         gameObject.name = _productName;
+        HealthPoints = 100;
     }
 }

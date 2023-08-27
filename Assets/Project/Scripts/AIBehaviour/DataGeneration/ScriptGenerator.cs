@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Text;
 using System.IO;
+using UnityEngine;
 
 public class ScriptGenerator
 {
@@ -16,8 +17,9 @@ public class " + nameOfFile + @" : DataBehaviourBase
 {
 " + GenerateDataFromDictionary(dict) +
 @"}";
-        // Setzen Sie hier den Pfad, wo Sie das Skript speichern möchten.
+
         string scriptPath = "Assets/" + folderStructure + "/" + nameOfFile + ".cs";
+
 
         File.WriteAllText(scriptPath, scriptContent);
 
@@ -48,7 +50,7 @@ public class " + nameOfFile + @" : DataBehaviourBase
 
             string namespaceStr = item.Value.type.Namespace;
 
-            if (namespaceStr.Contains("System"))
+            if (namespaceStr != null &&namespaceStr.Contains("System"))
             {
                 buildString.Append(" = ");
 

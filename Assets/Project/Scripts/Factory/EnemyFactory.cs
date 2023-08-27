@@ -36,7 +36,8 @@ public class EnemyFactory : ScriptableObject
             pooledEnemy.transform.rotation = Quaternion.identity;
             pooledEnemy.SetActive(true);
         }
-
+        BasicEnemy pooledEnemyLogic = pooledEnemy.GetComponent<BasicEnemy>();
+        pooledEnemyLogic.Initialize();
         EnemyBT pooledEnemyScript = pooledEnemy.GetComponent<EnemyBT>();
         //pooledEnemyScript.Initialize(_waypointArray);
 

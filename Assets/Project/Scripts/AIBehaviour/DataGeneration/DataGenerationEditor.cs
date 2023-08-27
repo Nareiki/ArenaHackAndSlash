@@ -12,10 +12,10 @@ using UnityEngine.UIElements;
 public class DataGenerationEditor : EditorWindow
 {
     private BasicTree _root;
-    private string nameOfFile = "";
+    private string _nameOfFile = "";
     string _scriptFolder;
 
-    private Dictionary<string, TypeAndValuePair> dataFromNodes;
+    private Dictionary<string, TypeAndValuePair> _dataFromNodes;
 
     [MenuItem("Window/NodeDataExtractor")]
     public static void ShowWindow()
@@ -25,7 +25,7 @@ public class DataGenerationEditor : EditorWindow
 
     private void OnGUI()
     {
-        dataFromNodes = new Dictionary<string, TypeAndValuePair>();
+        _dataFromNodes = new Dictionary<string, TypeAndValuePair>();
 
 
 
@@ -34,7 +34,7 @@ public class DataGenerationEditor : EditorWindow
 
         _root = (BasicTree)EditorGUILayout.ObjectField("Root Node", _root, typeof(BasicTree), true);
 
-        nameOfFile = EditorGUILayout.TextField("Object Name: ", nameOfFile);
+        _nameOfFile = EditorGUILayout.TextField("Object Name: ", _nameOfFile);
 
         if (GUILayout.Button("Extract Data"))
         {
@@ -44,8 +44,8 @@ public class DataGenerationEditor : EditorWindow
                 ExtractNodeData(_root);
                 //CreateScriptableObjectInstance(dataFromNodes);
                 ScriptGenerator generator = new ScriptGenerator();
-                generator.CreateNewScript(dataFromNodes, _scriptFolder, nameOfFile);
-                Debug.Log(dataFromNodes);
+                generator.CreateNewScript(_dataFromNodes, _scriptFolder, _nameOfFile);
+                Debug.Log(_dataFromNodes);
                 Debug.Log("Node data extracted and saved into the ScriptableObject");
             }
             else
@@ -62,8 +62,25 @@ public class DataGenerationEditor : EditorWindow
 
         FileInfo fi = new FileInfo(scriptFilePath);
 
+        bool isWinEditor = Application.platform == RuntimePlatform.WindowsEditor;
+        bool isOSXEditor = Application.platform == RuntimePlatform.OSXEditor;
+
         _scriptFolder = fi.Directory.ToString();
-        _scriptFolder = _scriptFolder.Replace(Application.dataPath, "");
+
+        if (isOSXEditor)
+        {
+            _scriptFolder = _scriptFolder.Replace(Application.dataPath, "");
+        }
+        else if (isWinEditor)
+        {
+            string test = "\\";
+
+            _scriptFolder = _scriptFolder.Replace("\\", "/");
+
+            _scriptFolder = _scriptFolder.Replace(Application.dataPath, "");
+        }
+       
+        
 
 
         Debug.Log(_scriptFolder);
@@ -149,11 +166,11 @@ public class DataGenerationEditor : EditorWindow
         {
             Debug.Log(field.GetValue(extractionClass));
             string keyToAdd = field.Name.Substring(1);
-            if (!dataFromNodes.ContainsKey(keyToAdd))
+            if (!_dataFromNodes.ContainsKey(keyToAdd))
             {
                 if (field.GetCustomAttribute<NonReflectionValue>() == null)
                 {
-                    dataFromNodes.Add(keyToAdd, new TypeAndValuePair(field.FieldType, field.GetValue(extractionClass)));
+                    _dataFromNodes.Add(keyToAdd, new TypeAndValuePair(field.FieldType, field.GetValue(extractionClass)));
                 }
             }
         }

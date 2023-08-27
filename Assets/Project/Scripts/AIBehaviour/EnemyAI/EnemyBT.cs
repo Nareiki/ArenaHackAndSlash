@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBT : BasicTree, IProduct
+public class EnemyBT : BasicTree, IProduct, IWeatherAffectable, IFire
 {
     [SerializeField] private DataBehaviourBase _enemyData;
     private Blackboard _enemyBlackboard;
@@ -13,6 +14,31 @@ public class EnemyBT : BasicTree, IProduct
 
     public string ProductName { get => _enemyBTName; private set => _enemyBTName = value; }
 
+    public void AffectedByRain()
+    {
+        _enemyBlackboard.SetData("element", Elements.Water);
+        StartCoroutine(WetTimer());
+    }
+
+    public void Burn()
+    {
+        _enemyBlackboard.SetData("element", Elements.Fire);
+
+        StartCoroutine(BurnTimer());
+    }
+
+    private IEnumerator BurnTimer()
+    {
+        yield return new WaitForSeconds(10);
+        _enemyBlackboard.SetData("element", Elements.None);
+    }
+
+    private IEnumerator WetTimer()
+    {
+        yield return new WaitForSeconds(5);
+        _enemyBlackboard.SetData("element", Elements.None);
+    }
+
     protected override BasicNode SetupTree()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -20,6 +46,7 @@ public class EnemyBT : BasicTree, IProduct
 
         BasicNode root = new Selector(new List<BasicNode>
         {
+            new TaskElementControl(_enemyBlackboard),
             new Sequence(new List<BasicNode> {
                 new CheckEnemyInAttackRange(_enemyBlackboard),
                 new TaskAttack(_enemyBlackboard)

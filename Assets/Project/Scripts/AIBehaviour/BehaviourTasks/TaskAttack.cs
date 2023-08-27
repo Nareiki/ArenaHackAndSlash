@@ -32,7 +32,7 @@ public class TaskAttack : BasicNode
 
         if (canAttack)
         {
-            bool? enemyIsDead = _enemyManager?.TakeHit();
+            bool? enemyIsDead = _enemyManager?.TakeHit(25f);
             if (enemyIsDead.HasValue && enemyIsDead.Value)
             {
                 blackboard.ResetData("target");
