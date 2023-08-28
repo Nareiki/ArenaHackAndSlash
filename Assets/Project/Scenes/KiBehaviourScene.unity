@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -495,12 +495,12 @@ PrefabInstance:
     - target: {fileID: 2482698504431033026, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000001629227
+      value: -0.000000016292276
       objectReference: {fileID: 0}
     - target: {fileID: 2482698504431033026, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000055336584
+      value: 0.0000000055336606
       objectReference: {fileID: 0}
     - target: {fileID: 3914628511738678325, guid: eb70f9f76b6ff4072a44044a9b996a69,
         type: 3}
@@ -581,7 +581,6 @@ MonoBehaviour:
   - {fileID: 1816600896}
   - {fileID: 2006919261}
   - {fileID: 1319254657}
-  _enemy: {fileID: 6277912375836810856, guid: 268572da0fae74668ba4ba2403fca433, type: 3}
   _minEnemyLoaded: 10
   _enemyFactory: {fileID: 11400000, guid: 2d9c75d1fa66948d3bde3a26b7938824, type: 2}
 --- !u!4 &226208958
@@ -1739,7 +1738,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 40f8976eb421744e088aad67ed52626b, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 36cbef481fb0a43c9b67cf382aa8d7fa, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1671443836
 GameObject:
